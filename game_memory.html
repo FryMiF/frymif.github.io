@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记忆翻牌 - 迷你游戏合集</title>
+    <meta name="description" content="考验记忆力的翻牌游戏，找出所有匹配的卡片对">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 记忆翻牌游戏特定样式 */
+        .memory-game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .memory-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: var(--background-light);
+            border-radius: var(--border-radius);
+        }
+        
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .memory-card {
+            position: relative;
+            height: 120px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .memory-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+        
+        .memory-card.flipped .memory-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .memory-card-front, .memory-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .memory-card-front {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 2.5rem;
+        }
+        
+        .memory-card-back {
+            background-color: var(--background-light);
+            transform: rotateY(180deg);
+            border: 2px solid var(--secondary-color);
+        }
+        
+        .memory-card-back i {
+            font-size: 3rem;
+            color: var(--accent-color);
+        }
+        
+        .memory-card.matched .memory-card-back {
+            background-color: rgba(0, 188, 212, 0.2);
+            border-color: var(--secondary-color);
+        }
+        
+        .memory-card.matched .memory-card-back i {
+            color: var(--secondary-color);
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .difficulty-btn {
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            border: none;
+            background-color: var(--background-light);
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .difficulty-btn.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        /* 游戏结束弹窗 */
+        .game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .game-over-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .game-over-modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .stars-container {
+            margin: 20px 0;
+            font-size: 2rem;
+            color: #ffc107;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 576px) {
+            .memory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .memory-card {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">迷你游戏合集</a>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">返回首页</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 游戏详情 -->
+    <section class="section game-details">
+        <div class="container">
+            <div class="game-container">
+                <div class="game-header">
+                    <a href="index.html" class="btn back-btn">
+                        <i class="fas fa-arrow-left"></i> 返回
+                    </a>
+                    <h1>记忆翻牌游戏</h1>
+                </div>
+                
+                <div class="game-description">
+                    <p>考验记忆力的经典游戏！翻开卡片，找到所有匹配的对子。挑战你的记忆极限，看看你需要多少步才能完成！</p>
+                </div>
+                
+                <div class="memory-game-container">
+                    <!-- 游戏统计信息 -->
+                    <div class="memory-stats">
+                        <div class="stat">
+                            <strong>步数：</strong> <span id="moves-counter">0</span>
+                        </div>
+                        <div class="stat">
+                            <strong>时间：</strong> <span id="time-counter">00:00</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 难度选择 -->
+                    <div class="difficulty-selector">
+                        <button class="difficulty-btn" data-grid="4x3">简单</button>
+                        <button class="difficulty-btn active" data-grid="4x4">中等</button>
+                        <button class="difficulty-btn" data-grid="6x4">困难</button>
+                    </div>
+                    
+                    <!-- 游戏网格 -->
+                    <div class="memory-grid" id="memory-grid">
+                        <!-- 卡片将通过JavaScript动态生成 -->
+                    </div>
+                    
+                    <!-- 游戏控制按钮 -->
+                    <div class="controls">
+                        <button class="btn" id="reset-btn">重新开始</button>
+                    </div>
+                </div>
+                
+                <!-- 游戏结束弹窗 -->
+                <div class="game-over-modal" id="game-over-modal">
+                    <div class="modal-content">
+                        <h2>恭喜！</h2>
+                        <p>你成功完成了记忆翻牌游戏！</p>
+                        <div class="stars-container" id="stars-result">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>你用了 <span id="final-moves">0</span> 步，耗时 <span id="final-time">00:00</span></p>
+                        <button class="btn" id="play-again-btn">再玩一次</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 迷你游戏合集团队 - 网站建设项目</p>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 游戏状态
+            const gameState = {
+                cards: [],
+                flippedCards: [],
+                matchedPairs: 0,
+                totalPairs: 0,
+                moves: 0,
+                gameStarted: false,
+                gameOver: false,
+                timer: null,
+                seconds: 0,
+                difficulty: {
+                    rows: 4,
+                    cols: 4
+                }
+            };
+            
+            // 游戏图标
+            const icons = [
+                'fa-heart', 'fa-star', 'fa-smile', 'fa-bell', 
+                'fa-moon', 'fa-sun', 'fa-tree', 'fa-gift',
+                'fa-cloud', 'fa-car', 'fa-home', 'fa-music',
+                'fa-bolt', 'fa-apple', 'fa-anchor', 'fa-bicycle',
+                'fa-bomb', 'fa-book', 'fa-bug', 'fa-camera',
+                'fa-coffee', 'fa-gem', 'fa-fire', 'fa-leaf'
+            ];
+            
+            // 元素引用
+            const grid = document.getElementById('memory-grid');
+            const movesCounter = document.getElementById('moves-counter');
+            const timeCounter = document.getElementById('time-counter');
+            const resetBtn = document.getElementById('reset-btn');
+            const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+            const gameOverModal = document.getElementById('game-over-modal');
+            const finalMoves = document.getElementById('final-moves');
+            const finalTime = document.getElementById('final-time');
+            const starsResult = document.getElementById('stars-result');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            
+            // 初始化游戏
+            function initGame() {
+                resetGameState();
+                createCards();
+                updateStats();
+                
+                // 绑定事件
+                resetBtn.addEventListener('click', resetGame);
+                playAgainBtn.addEventListener('click', closeModalAndReset);
+                
+                // 绑定难度按钮
+                difficultyBtns.forEach(btn => {
+                    btn.addEventListener('click', changeDifficulty);
+                });
+            }
+            
+            // 重置游戏状态
+            function resetGameState() {
+                gameState.cards = [];
+                gameState.flippedCards = [];
+                gameState.matchedPairs = 0;
+                gameState.moves = 0;
+                gameState.gameStarted = false;
+                gameState.gameOver = false;
+                gameState.seconds = 0;
+                
+                if (gameState.timer) {
+                    clearInterval(gameState.timer);
+                    gameState.timer = null;
+                }
+            }
+            
+            // 创建卡片
+            function createCards() {
+                grid.innerHTML = '';
+                
+                // 设置网格样式
+                grid.style.gridTemplateColumns = `repeat(${gameState.difficulty.cols}, 1fr)`;
+                
+                // 计算需要的卡片对数
+                gameState.totalPairs = (gameState.difficulty.rows * gameState.difficulty.cols) / 2;
+                
+                // 创建卡片数组
+                let cardIcons = [];
+                for (let i = 0; i < gameState.totalPairs; i++) {
+                    cardIcons.push(icons[i]);
+                    cardIcons.push(icons[i]);
+                }
+                
+                // 随机洗牌
+                shuffleArray(cardIcons);
+                
+                // 创建卡片元素
+                for (let i = 0; i < cardIcons.length; i++) {
+                    const card = document.createElement('div');
+                    card.className = 'memory-card';
+                    card.dataset.index = i;
+                    
+                    card.innerHTML = `
+                        <div class="memory-card-inner">
+                            <div class="memory-card-front">
+                                <i class="fas fa-question"></i>
+                            </div>
+                            <div class="memory-card-back">
+                                <i class="fas ${cardIcons[i]}"></i>
+                            </div>
+                        </div>
+                    `;
+                    
+                    card.addEventListener('click', flipCard);
+                    grid.appendChild(card);
+                    
+                    // 保存卡片信息
+                    gameState.cards.push({
+                        element: card,
+                        icon: cardIcons[i],
+                        flipped: false,
+                        matched: false
+                    });
+                }
+            }
+            
+            // 洗牌算法
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // 翻牌
+            function flipCard() {
+                // 如果游戏结束或卡片已翻开/匹配，则不处理
+                const index = parseInt(this.dataset.index);
+                const card = gameState.cards[index];
+                
+                if (gameState.gameOver || card.flipped || card.matched || gameState.flippedCards.length >= 2) {
+                    return;
+                }
+                
+                // 开始计时（第一次翻牌）
+                if (!gameState.gameStarted) {
+                    startTimer();
+                    gameState.gameStarted = true;
+                }
+                
+                // 翻转卡片
+                card.flipped = true;
+                card.element.classList.add('flipped');
+                gameState.flippedCards.push(card);
+                
+                // 检查是否已翻开两张卡片
+                if (gameState.flippedCards.length === 2) {
+                    // 增加步数
+                    gameState.moves++;
+                    updateStats();
+                    
+                    // 检查是否匹配
+                    setTimeout(checkMatch, 600);
+                }
+            }
+            
+            // 检查匹配
+            function checkMatch() {
+                const card1 = gameState.flippedCards[0];
+                const card2 = gameState.flippedCards[1];
+                
+                if (card1.icon === card2.icon) {
+                    // 匹配
+                    card1.matched = true;
+                    card2.matched = true;
+                    card1.element.classList.add('matched');
+                    card2.element.classList.add('matched');
+                    gameState.matchedPairs++;
+                    
+                    // 检查是否游戏胜利
+                    if (gameState.matchedPairs === gameState.totalPairs) {
+                        endGame();
+                    }
+                } else {
+                    // 不匹配，翻回
+                    card1.flipped = false;
+                    card2.flipped = false;
+                    card1.element.classList.remove('flipped');
+                    card2.element.classList.remove('flipped');
+                }
+                
+                // 清空已翻开的卡片
+                gameState.flippedCards = [];
+            }
+            
+            // 开始计时器
+            function startTimer() {
+                gameState.timer = setInterval(function() {
+                    gameState.seconds++;
+                    updateStats();
+                }, 1000);
+            }
+            
+            // 更新统计信息
+            function updateStats() {
+                movesCounter.textContent = gameState.moves;
+                
+                // 格式化时间
+                const minutes = Math.floor(gameState.seconds / 60);
+                const seconds = gameState.seconds % 60;
+                const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                timeCounter.textContent = formattedTime;
+            }
+            
+            // 结束游戏
+            function endGame() {
+                gameState.gameOver = true;
+                clearInterval(gameState.timer);
+                
+                // 更新结果
+                finalMoves.textContent = gameState.moves;
+                finalTime.textContent = timeCounter.textContent;
+                
+                // 计算星级评分
+                let stars = 3;
+                if (gameState.moves > gameState.totalPairs * 2) {
+                    stars = 2;
+                }
+                if (gameState.moves > gameState.totalPairs * 3) {
+                    stars = 1;
+                }
+                
+                // 更新星级显示
+                starsResult.innerHTML = '';
+                for (let i = 0; i < stars; i++) {
+                    const star = document.createElement('i');
+                    star.className = 'fas fa-star';
+                    starsResult.appendChild(star);
+                }
+                
+                // 显示弹窗
+                setTimeout(() => {
+                    gameOverModal.classList.add('active');
+                }, 500);
+            }
+            
+            // 关闭弹窗并重置游戏
+            function closeModalAndReset() {
+                gameOverModal.classList.remove('active');
+                resetGame();
+            }
+            
+            // 重置游戏
+            function resetGame() {
+                resetGameState();
+                createCards();
+                updateStats();
+            }
+            
+            // 修改难度
+            function changeDifficulty() {
+                // 更新活动状态
+                difficultyBtns.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 获取网格配置
+                const gridConfig = this.dataset.grid.split('x');
+                gameState.difficulty.cols = parseInt(gridConfig[0]);
+                gameState.difficulty.rows = parseInt(gridConfig[1]);
+                
+                // 重置游戏
+                resetGame();
+            }
+            
+            // 初始化游戏
+            initGame();
+        });
+    </script>
+</body>
+</html>
