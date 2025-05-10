@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const lines = [
             "我们是一支充满激情的团队，",
             "致力于创造好玩、有趣的游戏体验。",
-            "每位成员都贡献自己的专业技能，通过紧密合作，",
+            "每位成员都贡献自己的专业技能，",
             "打造了这个迷你游戏合集网站。"
         ];
         

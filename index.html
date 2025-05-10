@@ -6,19 +6,15 @@
     <title>迷你游戏合集 - 团队协作项目</title>
     <meta name="description" content="一个展示多个精彩迷你游戏的静态网站，由团队合作开发">
     
-    <!-- 字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
     
-    <!-- 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- 自定义样式 -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="logo">迷你游戏合集</a>
@@ -35,7 +31,6 @@
         </div>
     </nav>
     
-    <!-- 欢迎/英雄区 -->
     <section id="hero" class="hero">
         <div class="container">
             <div class="hero-content fade-in">
@@ -51,15 +46,32 @@
         </div>
     </section>
     
-    <!-- 游戏预览卡片区 -->
     <section id="games" class="games-showcase section">
         <div class="container">
             <h2 class="section-title">精选游戏</h2>
             <div class="games-grid">
-                <!-- 游戏1 - 已实现 -->
                 <div class="game-card fade-in">
-                    <div class="game-image" style="background-color: var(--primary-color); display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">贪吃蛇游戏</span>
+                    <div class="game-image">
+                        <div class="preview-container snake-preview-bg">
+                            <div class="snake-static-preview">
+                                <!-- 静态蛇身 -->
+                                <div class="snake-body-static">
+                                    <!-- 蛇头 -->
+                                    <div class="snake-head-static"></div>
+                                    <!-- 蛇身体部分 -->
+                                    <div class="snake-segment-static"></div>
+                                    <div class="snake-segment-static"></div>
+                                    <!-- 蛇尾（带眼睛） -->
+                                    <div class="snake-segment-static snake-tail">
+                                        <!-- 蛇眼睛 -->
+                                        <div class="snake-eye-left"></div>
+                                        <div class="snake-eye-right"></div>
+                                    </div>
+                                </div>
+                                <!-- 静态食物 -->
+                                <div class="snake-food-static"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="game-content">
                         <h3>贪吃蛇大作战</h3>
@@ -68,11 +80,18 @@
                     </div>
                 </div>
                 
-                <!-- 游戏2 - 敬请期待 -->
                 <div class="game-card fade-in">
-                    <div class="game-image" style="background-color: var(--secondary-color); display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">俄罗斯方块</span>
-                    </div>
+                    <div class="game-image">
+                        <div class="preview-container tetris-preview-bg">
+                            <div class="tetris-grid-preview">
+                                <div class="tetromino-preview t-shape" style="top: 20%; left: 30%;"></div>
+                                <div class="tetromino-preview l-shape" style="top: 50%; left: 50%;"></div>
+                                <div class="tetromino-preview i-shape" style="top: 70%; left: 10%;"></div>
+                                <div class="tetromino-preview o-shape" style="top: 10%; left: 60%;"></div>
+                                 <div class="tetromino-preview s-shape falling-block" style="left: 40%;"></div>
+                            </div>
+                        </div>
+                        </div>
                     <div class="game-content">
                         <h3>俄罗斯方块</h3>
                         <p>经典的俄罗斯方块游戏，挑战你的空间想象力和反应速度。</p>
@@ -80,11 +99,36 @@
                     </div>
                 </div>
                 
-                <!-- 游戏3 - 敬请期待 -->
                 <div class="game-card fade-in">
-                    <div class="game-image" style="background-color: var(--accent-color); display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">记忆翻牌</span>
-                    </div>
+                    <div class="game-image">
+                        <div class="preview-container memory-preview-bg">
+                            <div class="memory-card-preview-wrapper">
+                                <div class="memory-card-preview">
+                                    <div class="memory-card-preview-inner">
+                                        <div class="memory-card-preview-front">?</div>
+                                        <div class="memory-card-preview-back"><i class="fas fa-star"></i></div>
+                                    </div>
+                                </div>
+                                <div class="memory-card-preview flipped"> <div class="memory-card-preview-inner">
+                                        <div class="memory-card-preview-front">?</div>
+                                        <div class="memory-card-preview-back"><i class="fas fa-heart"></i></div>
+                                    </div>
+                                </div>
+                                <div class="memory-card-preview">
+                                     <div class="memory-card-preview-inner">
+                                        <div class="memory-card-preview-front">?</div>
+                                        <div class="memory-card-preview-back"><i class="fas fa-bolt"></i></div>
+                                    </div>
+                                </div>
+                                 <div class="memory-card-preview">
+                                     <div class="memory-card-preview-inner">
+                                        <div class="memory-card-preview-front">?</div>
+                                        <div class="memory-card-preview-back"><i class="fas fa-cloud"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     <div class="game-content">
                         <h3>记忆翻牌</h3>
                         <p>考验记忆力的翻牌游戏，找出所有匹配的卡片对。</p>
@@ -95,20 +139,16 @@
         </div>
     </section>
     
-    <!-- 团队展示区 -->
     <section id="team" class="team-showcase section">
         <div class="container">
             <h2 class="section-title">开发团队</h2>
             <div class="team-circle-container fade-in">
-                <!-- 装饰性外环 -->
                 <div class="team-ring"></div>
                 
-                <!-- 中心团队标志 -->
                 <div class="team-logo">
                     <i class="fas fa-users"></i>
                 </div>
                 
-                <!-- 团队成员 1 - 黄梓桉 (左侧) -->
                 <div class="team-member">
                     <div class="member-content">
                         <h3>黄梓桉</h3>
@@ -119,7 +159,6 @@
                     </div>
                 </div>
                 
-                <!-- 团队成员 2 - 邓凯 (组长) (上方) -->
                 <div class="team-member">
                     <div class="member-content">
                         <h3>邓凯 (组长)</h3>
@@ -130,7 +169,6 @@
                     </div>
                 </div>
                 
-                <!-- 团队成员 3 - 黄景涛 (右侧) -->
                 <div class="team-member">
                     <div class="member-content">
                         <h3>黄景涛</h3>
@@ -149,14 +187,12 @@
         </div>
     </section>
     
-    <!-- 页脚 -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 迷你游戏合集团队 - 网站建设项目</p>
         </div>
     </footer>
     
-    <!-- JavaScript -->
     <script src="js/script.js"></script>
 </body>
-</html> 
+</html>

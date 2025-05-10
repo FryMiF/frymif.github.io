@@ -33,6 +33,16 @@
     --transition-fast: 0.2s;
     --transition-normal: 0.3s;
     --transition-slow: 0.5s;
+
+    /* 游戏预览特定颜色 */
+    --snake-bg: #a3d9a5; /* 贪吃蛇背景色 */
+    --snake-color: #38761d; /* 蛇的颜色 */
+    --snake-food-color: #e67e22; /* 食物颜色 */
+    --tetris-bg: #d1e0e0; /* 俄罗斯方块背景色 */
+    --tetris-grid-line: #b0c4c4; /* 俄罗斯方块网格线颜色 */
+    --memory-bg: #e1bee7; /* 记忆翻牌背景色 */
+    --memory-card-front: #9c27b0; /* 记忆卡片正面 */
+    --memory-card-icon: #ffffff; /* 记忆卡片图标 */
 }
 
 body {
@@ -242,6 +252,8 @@ a:hover {
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+    display: flex; /* 使用flex布局使内容和按钮区域分开 */
+    flex-direction: column; /* 垂直排列 */
 }
 
 .game-card:hover {
@@ -251,25 +263,22 @@ a:hover {
 
 .game-image {
     width: 100%;
-    height: 200px;
-    background-color: var(--primary-color);
+    height: 220px; /* 稍微增加预览区域高度 */
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* 确保预览动画不溢出 */
+    /* 移除原有的背景色和文字，由预览动画填充 */
 }
 
-.game-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform var(--transition-normal) ease;
-}
-
-.game-card:hover .game-image img {
-    transform: scale(1.1);
-}
+/* 移除原有的 game-image img 样式，因为我们不再使用图片 */
+/* .game-image img { ... } */
+/* .game-card:hover .game-image img { ... } */
 
 .game-content {
     padding: var(--spacing-sm);
+    flex-grow: 1; /* 使内容区域填充剩余空间 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 将按钮推到底部 */
 }
 
 .game-content h3 {
@@ -280,12 +289,256 @@ a:hover {
 .game-content p {
     color: #666;
     margin-bottom: var(--spacing-sm);
+    flex-grow: 1; /* 使描述文字填充可用空间 */
 }
 
 .game-content .btn {
     width: 100%;
     text-align: center;
+    margin-top: auto; /* 将按钮推到内容区域的底部 */
 }
+
+/* --- 游戏预览动画通用容器 --- */
+.preview-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- 贪吃蛇预览样式 --- */
+.snake-preview-bg {
+    background-color: var(--snake-bg);
+    /* 网格背景 */
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 15px 15px; /* 网格大小 */
+}
+
+/* 静态贪吃蛇表示图 */
+.snake-static-preview {
+    width: 90%;
+    height: 90%;
+    position: relative;
+}
+
+.snake-body-static {
+    position: absolute;
+    left: 20%; /* 蛇开始的位置 */
+    top: 40%;
+    display: flex;
+    flex-direction: row; /* 蛇是水平方向的 */
+}
+
+.snake-head-static {
+    width: 16px;
+    height: 16px;
+    background-color: var(--snake-color);
+    border-radius: 3px;
+    position: relative;
+}
+
+.snake-tail {
+    position: relative; /* 添加相对定位，使眼睛能相对于蛇尾定位 */
+}
+
+.snake-eye-left, .snake-eye-right {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #000;
+    border-radius: 50%;
+    top: 4px;
+}
+
+.snake-eye-left {
+    left: 3px;
+}
+
+.snake-eye-right {
+    left: 10px;
+}
+
+.snake-segment-static {
+    width: 16px;
+    height: 16px;
+    background-color: var(--snake-color);
+    border-radius: 3px;
+    margin-left: -1px; /* 使节段连接在一起，没有间隙 */
+}
+
+.snake-food-static {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: var(--snake-food-color);
+    border-radius: 50%;
+    top: 40%;
+    right: 25%;
+    animation: snake-food-blink 1s ease-in-out infinite;
+}
+
+@keyframes snake-food-blink {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 5px var(--snake-food-color);
+    }
+    50% {
+        opacity: 0.6;
+        box-shadow: 0 0 2px var(--snake-food-color);
+    }
+}
+
+/* --- 俄罗斯方块预览样式 --- */
+.tetris-preview-bg {
+    background-color: var(--tetris-bg);
+    padding: 10px;
+}
+.tetris-grid-preview {
+    width: 120px; /* 预览区域宽度 */
+    height: 180px; /* 预览区域高度 */
+    position: relative;
+    border: 1px solid var(--tetris-grid-line);
+    background-image:
+        linear-gradient(var(--tetris-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--tetris-grid-line) 1px, transparent 1px);
+    background-size: 12px 12px; /* 单元格大小 */
+}
+.tetromino-preview {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(4, 10px); /* 假设最大4x4 */
+    grid-template-rows: repeat(4, 10px);
+    gap: 1px;
+}
+.tetromino-preview div { /* 小方块 */
+    width: 10px;
+    height: 10px;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+/* 不同形状的方块 (简化示例，实际需要更多CSS来定义形状和颜色) */
+.tetromino-preview.t-shape div:nth-child(1),
+.tetromino-preview.t-shape div:nth-child(2),
+.tetromino-preview.t-shape div:nth-child(3),
+.tetromino-preview.t-shape div:nth-child(6) { background-color: #9b59b6; } /* 紫色T */
+
+.tetromino-preview.l-shape div:nth-child(1),
+.tetromino-preview.l-shape div:nth-child(5),
+.tetromino-preview.l-shape div:nth-child(9),
+.tetromino-preview.l-shape div:nth-child(10){ background-color: #e67e22; } /* 橙色L */
+
+.tetromino-preview.i-shape div:nth-child(1),
+.tetromino-preview.i-shape div:nth-child(2),
+.tetromino-preview.i-shape div:nth-child(3),
+.tetromino-preview.i-shape div:nth-child(4){ background-color: #3498db; } /* 蓝色I */
+
+.tetromino-preview.o-shape div:nth-child(1),
+.tetromino-preview.o-shape div:nth-child(2),
+.tetromino-preview.o-shape div:nth-child(5),
+.tetromino-preview.o-shape div:nth-child(6){ background-color: #f1c40f; } /* 黄色O */
+
+.tetromino-preview.s-shape div:nth-child(2),
+.tetromino-preview.s-shape div:nth-child(3),
+.tetromino-preview.s-shape div:nth-child(5),
+.tetromino-preview.s-shape div:nth-child(6){ background-color: #2ecc71; } /* 绿色S */
+
+
+/* 俄罗斯方块下落动画 */
+.falling-block {
+    animation: tetrisFall 3s linear infinite;
+    transform-origin: top center;
+}
+@keyframes tetrisFall {
+    0% { transform: translateY(-30px) rotate(0deg); opacity: 1;}
+    80% { transform: translateY(160px) rotate(720deg); opacity: 1;} /* 假设落到底部 */
+    90% { transform: translateY(160px) rotate(720deg); opacity: 0.5;}
+    100% { transform: translateY(160px) rotate(720deg); opacity: 0;}
+}
+
+/* --- 记忆翻牌预览样式 --- */
+.memory-preview-bg {
+    background-color: var(--memory-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.memory-card-preview-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2x2 卡片预览 */
+    gap: 10px;
+    width: 140px; /* 控制整体大小 */
+}
+.memory-card-preview {
+    width: 60px; /* 卡片大小 */
+    height: 80px;
+    perspective: 600px;
+    cursor: default; /* 预览不可点击 */
+}
+.memory-card-preview-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform var(--transition-slow) ease;
+    animation: memoryFlip 5s infinite ease-in-out;
+}
+.memory-card-preview:nth-child(2) .memory-card-preview-inner,
+.memory-card-preview.flipped .memory-card-preview-inner { /* 保持第二张卡片翻开 */
+    transform: rotateY(180deg);
+    animation-delay: -2.5s; /* 错开动画 */
+}
+.memory-card-preview:nth-child(3) .memory-card-preview-inner {
+    animation-delay: -1.25s;
+}
+.memory-card-preview:nth-child(4) .memory-card-preview-inner {
+    animation-delay: -3.75s;
+}
+
+.memory-card-preview-front,
+.memory-card-preview-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+.memory-card-preview-front {
+    background-color: var(--memory-card-front);
+    color: var(--text-light);
+}
+.memory-card-preview-back {
+    background-color: #fff;
+    color: var(--accent-color);
+    transform: rotateY(180deg);
+}
+.memory-card-preview-back i {
+    font-size: 2rem;
+    color: var(--memory-card-icon);
+}
+/* 确保图标颜色与背景有对比 */
+.memory-card-preview-back .fa-star { color: #f1c40f; }
+.memory-card-preview-back .fa-heart { color: #e74c3c; }
+.memory-card-preview-back .fa-bolt { color: #3498db; }
+.memory-card-preview-back .fa-cloud { color: #95a5a6; }
+
+
+@keyframes memoryFlip {
+    0%, 20% { transform: rotateY(0deg); } /* 显示正面 */
+    30%, 70% { transform: rotateY(180deg); } /* 翻到背面 */
+    80%, 100% { transform: rotateY(0deg); } /* 翻回正面 */
+}
+
 
 /* 团队展示区样式 */
 .team-showcase {
@@ -359,7 +612,7 @@ a:hover {
     transition: border-color var(--transition-normal) ease;
 }
 
-.team-member:nth-child(2):hover::after {
+.team-member:nth-child(2):hover::after { /* 注意：这里选择器可能需要根据实际HTML结构调整，如果team-logo是第一个子元素 */
     border-color: var(--primary-color);
 }
 
@@ -370,11 +623,11 @@ a:hover {
 .team-member:nth-child(4):hover::after {
     border-color: var(--secondary-color);
 }
-
+/* 如果有第5个成员，可以取消注释
 .team-member:nth-child(5):hover::after {
     border-color: var(--accent-color);
 }
-
+*/
 .member-content {
     text-align: center;
     padding: var(--spacing-xs);
@@ -430,24 +683,25 @@ a:hover {
     font-size: 0.7rem;
 }
 
-/* 定位三个团队成员 */
-.team-member:nth-child(2) {
+/* 定位三个团队成员，假设 .team-logo 是第一个子元素 */
+.team-circle-container > .team-member:nth-of-type(1) { /* 黄梓桉 */
     top: 50%;
     left: 0;
     transform: translateY(-50%);
 }
 
-.team-member:nth-child(3) {
+.team-circle-container > .team-member:nth-of-type(2) { /* 邓凯 */
     top: 0%;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.team-member:nth-child(4) {
+.team-circle-container > .team-member:nth-of-type(3) { /* 黄景涛 */
     top: 50%;
     right: 0;
     transform: translateY(-50%);
 }
+
 
 /* 装饰性外环 */
 .team-ring {
@@ -633,6 +887,10 @@ a:hover {
     .team-ring {
         display: none;
     }
+
+    .game-image { /* 移动端适当减小预览区高度 */
+        height: 180px;
+    }
 }
 
 @media (max-width: 576px) {
@@ -655,6 +913,36 @@ a:hover {
     
     .game-frame {
         height: 300px;
+    }
+    .game-image { /* 进一步减小预览区高度 */
+        height: 160px;
+    }
+    .memory-card-preview-wrapper {
+        width: 120px; /* 缩小记忆卡片预览 */
+    }
+    .memory-card-preview {
+        width: 50px;
+        height: 70px;
+    }
+    .memory-card-preview-front, .memory-card-preview-back {
+        font-size: 1.5rem;
+    }
+    .memory-card-preview-back i {
+        font-size: 1.7rem;
+    }
+
+    .tetris-grid-preview {
+        width: 100px;
+        height: 150px;
+        background-size: 10px 10px;
+    }
+    .tetromino-preview {
+        grid-template-columns: repeat(4, 8px);
+        grid-template-rows: repeat(4, 8px);
+    }
+    .tetromino-preview div {
+        width: 8px;
+        height: 8px;
     }
 }
 
