@@ -623,11 +623,11 @@ a:hover {
 .team-member:nth-child(4):hover::after {
     border-color: var(--secondary-color);
 }
-/* 如果有第5个成员，可以取消注释
+/* 如果有第5个成员，可以取消注释*/
 .team-member:nth-child(5):hover::after {
     border-color: var(--accent-color);
 }
-*/
+
 .member-content {
     text-align: center;
     padding: var(--spacing-xs);
