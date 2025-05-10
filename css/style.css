@@ -616,14 +616,14 @@ a:hover {
     border-color: var(--primary-color);
 }
 
-.team-member:nth-child(3):hover::after {
+.team-member:nth-child(3):hover::after { 
     border-color: var(--primary-color);
 }
 
 .team-member:nth-child(4):hover::after {
     border-color: var(--secondary-color);
 }
-/* 如果有第5个成员，可以取消注释*/
+
 .team-member:nth-child(5):hover::after {
     border-color: var(--accent-color);
 }
