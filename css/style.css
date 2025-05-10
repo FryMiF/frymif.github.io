@@ -679,3 +679,36 @@ a:hover {
 .text-center {
     text-align: center;
 }
+
+/* 打字机效果样式 */
+.typewriter-container {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+    min-height: 3.2rem; /* 固定高度防止文本变化时布局跳动 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#typewriter-text {
+    position: relative;
+    white-space: pre-wrap; /* 确保换行符被正确处理 */
+    word-break: break-word; /* 允许在单词内换行 */
+}
+
+#typewriter-text::after {
+    content: '|';
+    position: absolute;
+    color: var(--text-light);
+    animation: cursor-blink 0.8s infinite;
+}
+
+@keyframes cursor-blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}

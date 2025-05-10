@@ -14,6 +14,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // 打字机效果
+    const typewriterElement = document.getElementById('typewriter-text');
+    if (typewriterElement) {
+        const fullText = "欢迎来到我们的迷你游戏合集。这里集合了由我们团队开发的各种有趣小游戏，带给您简单而愉快的游戏体验。";
+        let currentIndex = 0;
+        const typingSpeed = 100; // 打字速度 (ms)
+        const pauseTime = 2000; // 完成后暂停时间 (ms)
+        
+        function typeEffect() {
+            if (!typewriterElement) return;
+            
+            // 打字完成后暂停，然后重新开始
+            if (currentIndex === fullText.length) {
+                setTimeout(() => {
+                    currentIndex = 0;
+                    typewriterElement.textContent = '';
+                    typeEffect();
+                }, pauseTime);
+                return;
+            }
+            
+            // 更新显示文本
+            currentIndex++;
+            typewriterElement.textContent = fullText.substring(0, currentIndex);
+            
+            // 设置下一次执行
+            setTimeout(typeEffect, typingSpeed);
+        }
+        
+        // 开始打字效果
+        typeEffect();
+    }
+    
     // 添加平滑滚动到锚点链接
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -41,6 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 navLinks.classList.remove('active');
                 
                 // 重置汉堡菜单图标
+                const spans = menuToggle.querySelectorAll('span');
                 if (spans) {
                     spans.forEach(span => span.classList.remove('active'));
                 }
