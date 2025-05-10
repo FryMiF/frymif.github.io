@@ -116,6 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
     handleScroll();
     window.addEventListener('scroll', handleScroll);
     
+    // 确保关键静态内容始终可见，不受滚动影响
+    document.querySelectorAll('.team-description, .section-title, .hero-content').forEach(element => {
+        element.classList.add('visible');
+    });
+    
     // 团队展示区的响应式调整
     function adjustTeamLayout() {
         const teamContainer = document.querySelector('.team-circle-container');
