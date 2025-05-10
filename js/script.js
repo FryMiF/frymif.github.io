@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 打字机效果
+    // 打字机效果 - 欢迎区
     const typewriterElement = document.getElementById('typewriter-text');
     if (typewriterElement) {
         const fullText = "欢迎来到我们的迷你游戏合集。这里集合了由我们团队开发的各种有趣小游戏，带给您简单而愉快的游戏体验。";
@@ -45,6 +45,79 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 开始打字效果
         typeEffect();
+    }
+    
+    // 打字机效果 - 团队描述
+    const teamTypewriterElement = document.getElementById('team-typewriter-text');
+    if (teamTypewriterElement) {
+        // 原始文本
+        const originalText = "我们是一支充满激情的团队，致力于创造好玩、有趣的游戏体验。每位成员都贡献自己的专业技能，通过紧密合作，打造了这个迷你游戏合集网站。";
+        
+        // 将文本分成三行
+        const lines = [
+            "我们是一支充满激情的团队，",
+            "致力于创造好玩、有趣的游戏体验。",
+            "每位成员都贡献自己的专业技能，通过紧密合作，",
+            "打造了这个迷你游戏合集网站。"
+        ];
+        
+        // 彩色文本版本
+        const coloredTextHTML = 
+            '<span class="color-primary">' + lines[0] + '</span>\n' +
+            '<span class="color-secondary">' + lines[1] + '</span>\n' +
+            '<span class="color-accent">' + lines[2] + '</span>\n' +
+            '<span class="color-primary">' + lines[3] + '</span>';
+        
+        // 纯文本版本（用于逐字打印）
+        const plainText = lines.join('\n');
+        
+        let currentIndex = 0;
+        const typingSpeed = 50; // 比欢迎区的更快一些
+        const pauseTime = 3000; // 完成后暂停时间更长
+        
+        function typeTeamEffect() {
+            if (!teamTypewriterElement) return;
+            
+            // 打字完成后暂停，然后重新开始
+            if (currentIndex === plainText.length) {
+                setTimeout(() => {
+                    currentIndex = 0;
+                    teamTypewriterElement.innerHTML = '';
+                    typeTeamEffect();
+                }, pauseTime);
+                return;
+            }
+            
+            // 更新显示文本
+            currentIndex++;
+            
+            // 将当前部分文本转换为对应的彩色HTML
+            let currentPlainText = plainText.substring(0, currentIndex);
+            let htmlResult = '';
+            
+            // 按行分割，并为每行添加相应的颜色类
+            const currentLines = currentPlainText.split('\n');
+            for (let i = 0; i < currentLines.length; i++) {
+                if (i === 0 && currentLines[i]) {
+                    htmlResult += '<span class="color-primary">' + currentLines[i] + '</span>';
+                } else if (i === 1 && currentLines[i]) {
+                    htmlResult += '\n<span class="color-secondary">' + currentLines[i] + '</span>';
+                } else if (i === 2 && currentLines[i]) {
+                    htmlResult += '\n<span class="color-accent">' + currentLines[i] + '</span>';
+                } else if (i === 3 && currentLines[i]) {
+                    htmlResult += '\n<span class="color-primary">' + currentLines[i] + '</span>';
+                }
+            }
+            
+            teamTypewriterElement.innerHTML = htmlResult;
+            
+            // 设置下一次执行
+            setTimeout(typeTeamEffect, typingSpeed);
+        }
+        
+        // 开始打字效果
+        teamTypewriterElement.innerHTML = '';
+        setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
     }
     
     // 添加平滑滚动到锚点链接
@@ -117,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', handleScroll);
     
     // 确保关键静态内容始终可见，不受滚动影响
-    document.querySelectorAll('.team-description, .section-title, .hero-content').forEach(element => {
+    document.querySelectorAll('.section-title, .hero-content').forEach(element => {
         element.classList.add('visible');
     });
     
