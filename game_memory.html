@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a237e">
     <title>记忆翻牌 - 迷你游戏合集</title>
     <meta name="description" content="考验记忆力的翻牌游戏，找出所有匹配的卡片对">
     
@@ -171,10 +173,65 @@
         @media (max-width: 576px) {
             .memory-grid {
                 grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
             }
             
             .memory-card {
                 height: 100px;
+            }
+            
+            .memory-stats {
+                font-size: 0.9rem;
+            }
+            
+            .difficulty-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .game-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .game-description p {
+                font-size: 0.9rem;
+            }
+            
+            .controls .btn {
+                width: 100%;
+                padding: 10px 0;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+        
+        /* 超小屏幕优化 */
+        @media (max-width: 375px) {
+            .memory-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .memory-card {
+                height: 90px;
+            }
+            
+            .memory-stats {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .difficulty-selector {
+                flex-wrap: wrap;
+            }
+        }
+        
+        /* 触摸设备优化 */
+        @media (hover: none) {
+            .memory-card:active .memory-card-inner {
+                transform: scale(0.95);
             }
         }
     </style>
@@ -307,11 +364,38 @@
             const starsResult = document.getElementById('stars-result');
             const playAgainBtn = document.getElementById('play-again-btn');
             
+            // 添加触摸优化
+            function addTouchSupport() {
+                // 检测是否为触摸设备
+                const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                
+                if (isTouchDevice) {
+                    // 添加active状态支持
+                    document.querySelectorAll('.btn, .difficulty-btn').forEach(button => {
+                        button.addEventListener('touchstart', function() {
+                            this.classList.add('active-touch');
+                        }, { passive: true });
+                        
+                        button.addEventListener('touchend', function() {
+                            setTimeout(() => {
+                                this.classList.remove('active-touch');
+                            }, 200);
+                        }, { passive: true });
+                    });
+                    
+                    // 防止双击缩放
+                    document.addEventListener('dblclick', function(e) {
+                        e.preventDefault();
+                    }, { passive: false });
+                }
+            }
+            
             // 初始化游戏
             function initGame() {
                 resetGameState();
                 createCards();
                 updateStats();
+                addTouchSupport(); // 添加触摸支持
                 
                 // 绑定事件
                 resetBtn.addEventListener('click', resetGame);
@@ -539,8 +623,37 @@
                 resetGame();
             }
             
+            // 优化对移动设备的支持
+            function optimizeMobile() {
+                // 调整难度 - 如果是小屏幕设备默认使用简单难度
+                if (window.innerWidth <= 375) {
+                    const easyBtn = document.querySelector('.difficulty-btn[data-grid="4x3"]');
+                    if (easyBtn) {
+                        difficultyBtns.forEach(btn => btn.classList.remove('active'));
+                        easyBtn.classList.add('active');
+                        gameState.difficulty.cols = 4;
+                        gameState.difficulty.rows = 3;
+                        resetGame();
+                    }
+                }
+                
+                // 禁用长按菜单
+                document.addEventListener('contextmenu', function(e) {
+                    if (e.target.closest('.memory-card')) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            }
+            
             // 初始化游戏
             initGame();
+            optimizeMobile();
+            
+            // 窗口大小变化时重新优化
+            window.addEventListener('resize', function() {
+                optimizeMobile();
+            });
         });
     </script>
 </body>

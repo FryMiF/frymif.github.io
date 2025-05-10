@@ -1,5 +1,11 @@
 // 等待DOM完全加载
 document.addEventListener('DOMContentLoaded', function() {
+    // 页面加载时添加过渡效果
+    document.body.classList.add('page-transition');
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, 100);
+    
     // 移动端导航菜单切换
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -7,10 +13,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (menuToggle) {
         menuToggle.addEventListener('click', function() {
             navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
             
             // 切换汉堡菜单的动画
             const spans = menuToggle.querySelectorAll('span');
             spans.forEach(span => span.classList.toggle('active'));
+            
+            // 防止菜单展开时背景滚动
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
         });
     }
     
@@ -19,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typewriterElement) {
         const fullText = "欢迎来到我们的迷你游戏合集。这里集合了由我们团队开发的各种有趣小游戏，带给您简单而愉快的游戏体验。";
         let currentIndex = 0;
-        const typingSpeed = 100; // 打字速度 (ms)
+        const typingSpeed = 50; // 提高打字速度 (ms)，移动设备上更快
         const pauseTime = 2000; // 完成后暂停时间 (ms)
         
         function typeEffect() {
@@ -43,8 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(typeEffect, typingSpeed);
         }
         
-        // 开始打字效果
-        typeEffect();
+        // 如果是移动设备，直接显示全部文本，不使用打字效果
+        if (window.innerWidth <= 576) {
+            typewriterElement.textContent = fullText;
+        } else {
+            // 开始打字效果
+            typeEffect();
+        }
     }
     
     // 打字机效果 - 团队描述
@@ -72,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const plainText = lines.join('\n');
         
         let currentIndex = 0;
-        const typingSpeed = 50; // 比欢迎区的更快一些
+        const typingSpeed = 30; // 更快的打字速度
         const pauseTime = 3000; // 完成后暂停时间更长
         
         function typeTeamEffect() {
@@ -115,9 +130,14 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(typeTeamEffect, typingSpeed);
         }
         
-        // 开始打字效果
-        teamTypewriterElement.innerHTML = '';
-        setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
+        // 如果是移动设备，直接显示全部文本，不使用打字效果
+        if (window.innerWidth <= 576) {
+            teamTypewriterElement.innerHTML = coloredTextHTML;
+        } else {
+            // 开始打字效果
+            teamTypewriterElement.innerHTML = '';
+            setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
+        }
     }
     
     // 添加平滑滚动到锚点链接
@@ -145,6 +165,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 如果在移动设备上，点击后关闭菜单
             if (navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
+                menuToggle.classList.remove('active');
+                document.body.style.overflow = '';
                 
                 // 重置汉堡菜单图标
                 const spans = menuToggle.querySelectorAll('span');
@@ -155,9 +177,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 页面滚动动画效果
+    // 页面滚动动画效果，使用防抖函数优化性能
     const fadeInElements = document.querySelectorAll('.fade-in');
     const slideInElements = document.querySelectorAll('.slide-in');
+    
+    // 防抖函数，优化滚动事件处理
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
     
     // 检测元素是否进入视口的函数
     const isInViewport = function(element) {
@@ -185,9 +219,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
     
+    // 优化的滚动事件处理
+    const debouncedHandleScroll = debounce(handleScroll, 10);
+    
     // 初始检查并绑定滚动事件
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', debouncedHandleScroll, { passive: true });
     
     // 确保关键静态内容始终可见，不受滚动影响
     document.querySelectorAll('.section-title, .hero-content').forEach(element => {
@@ -255,7 +292,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 初始调整和窗口大小改变时调整
+    // 添加触摸支持：让hover效果在移动设备上也能正常工作
+    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        const cards = document.querySelectorAll('.game-card, .team-member');
+        cards.forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.classList.add('touch-hover');
+            }, { passive: true });
+            
+            card.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.classList.remove('touch-hover');
+                }, 300);
+            }, { passive: true });
+        });
+    }
+    
+    // 使用ResizeObserver代替window.resize事件，提高性能
+    if ('ResizeObserver' in window) {
+        const resizeObserver = new ResizeObserver(debounce(() => {
+            adjustTeamLayout();
+        }, 100));
+        
+        const observeTarget = document.querySelector('.team-showcase');
+        if (observeTarget) {
+            resizeObserver.observe(observeTarget);
+        }
+    } else {
+        // 回退到传统的resize事件，如果浏览器不支持ResizeObserver
+        window.addEventListener('resize', debounce(adjustTeamLayout, 100));
+    }
+    
+    // 初始调整
     adjustTeamLayout();
-    window.addEventListener('resize', adjustTeamLayout);
 }); 

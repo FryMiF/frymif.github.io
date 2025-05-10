@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* 移除移动端点击时的高亮效果 */
 }
 
 :root {
@@ -45,12 +46,19 @@
     --memory-card-icon: #ffffff; /* 记忆卡片图标 */
 }
 
+html, body {
+    overflow-x: hidden; /* 防止水平滚动 */
+    width: 100%;
+    position: relative;
+}
+
 body {
     font-family: var(--body-font);
     line-height: 1.6;
     color: var(--text-dark);
     background-color: var(--background-light);
-    overflow-x: hidden;
+    min-height: 100vh; /* 确保至少有视口高度 */
+    padding-bottom: env(safe-area-inset-bottom); /* iOS安全区域适配 */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -161,6 +169,7 @@ a:hover {
     color: var(--text-light);
     font-weight: 600;
     position: relative;
+    padding: 0.5rem 0; /* 增加点击区域 */
 }
 
 .nav-links a::after {
@@ -185,6 +194,9 @@ a:hover {
     width: 30px;
     height: 21px;
     cursor: pointer;
+    z-index: 1001; /* 确保菜单按钮在最上层 */
+    padding: 8px; /* 增加点击区域 */
+    margin: -8px; /* 抵消padding增加的空间 */
 }
 
 .menu-toggle span {
@@ -194,6 +206,19 @@ a:hover {
     background-color: var(--text-light);
     border-radius: 3px;
     transition: all var(--transition-normal) ease;
+}
+
+/* 汉堡菜单动画 */
+.menu-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
 }
 
 /* 欢迎区样式 */
@@ -254,9 +279,10 @@ a:hover {
     transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
     display: flex; /* 使用flex布局使内容和按钮区域分开 */
     flex-direction: column; /* 垂直排列 */
+    height: 100%; /* 确保所有卡片高度一致 */
 }
 
-.game-card:hover {
+.game-card:hover, .game-card:active {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
@@ -307,6 +333,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation; /* 改善移动端触摸体验 */
 }
 
 /* --- 贪吃蛇预览样式 --- */
@@ -844,24 +871,37 @@ a:hover {
     }
     
     .nav-links {
-        position: absolute;
-        top: 100%;
+        position: fixed; /* 改为fixed而不是absolute，确保滚动时仍然可见 */
+        top: 60px; /* 导航栏高度 */
         left: 0;
         width: 100%;
+        height: 0;
         background-color: var(--primary-color);
         flex-direction: column;
         align-items: center;
-        padding: var(--spacing-sm) 0;
-        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-        transition: clip-path var(--transition-normal) ease;
+        justify-content: flex-start;
+        padding: 0;
+        overflow: hidden;
+        transition: height var(--transition-normal) ease, padding var(--transition-normal) ease;
+        z-index: 1000;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
     
     .nav-links.active {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        height: auto;
+        padding: var(--spacing-md) 0;
     }
     
     .nav-links li {
-        margin: var(--spacing-xs) 0;
+        margin: var(--spacing-sm) 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: var(--spacing-xs) 0;
+        width: 100%;
     }
     
     .team-circle-container {
@@ -882,6 +922,8 @@ a:hover {
     .team-member {
         position: static;
         transform: none;
+        width: 180px; /* 在移动设备上增加团队成员卡片大小 */
+        height: 180px;
     }
     
     .team-ring {
@@ -890,6 +932,14 @@ a:hover {
 
     .game-image { /* 移动端适当减小预览区高度 */
         height: 180px;
+    }
+    
+    /* 确保hero区域在移动设备上有足够高度 */
+    .hero {
+        min-height: 100vh;
+        height: auto;
+        padding-top: 80px; /* 增加顶部padding，确保内容不被导航栏遮挡 */
+        padding-bottom: var(--spacing-lg);
     }
 }
 
@@ -907,6 +957,12 @@ a:hover {
         gap: var(--spacing-xs);
     }
     
+    .hero-btns .btn {
+        width: 100%; /* 让按钮占满宽度 */
+        margin-bottom: var(--spacing-xs);
+        padding: var(--spacing-sm); /* 增加按钮高度，更容易点击 */
+    }
+    
     .games-grid {
         grid-template-columns: 1fr;
     }
@@ -914,19 +970,24 @@ a:hover {
     .game-frame {
         height: 300px;
     }
+    
     .game-image { /* 进一步减小预览区高度 */
         height: 160px;
     }
+    
     .memory-card-preview-wrapper {
         width: 120px; /* 缩小记忆卡片预览 */
     }
+    
     .memory-card-preview {
         width: 50px;
         height: 70px;
     }
+    
     .memory-card-preview-front, .memory-card-preview-back {
         font-size: 1.5rem;
     }
+    
     .memory-card-preview-back i {
         font-size: 1.7rem;
     }
@@ -936,13 +997,88 @@ a:hover {
         height: 150px;
         background-size: 10px 10px;
     }
+    
     .tetromino-preview {
         grid-template-columns: repeat(4, 8px);
         grid-template-rows: repeat(4, 8px);
     }
+    
     .tetromino-preview div {
         width: 8px;
         height: 8px;
+    }
+    
+    /* 增加团队成员卡片中文本可见性 */
+    .team-member:hover .member-skills,
+    .team-member:active .member-skills {
+        max-height: 100px;
+        opacity: 1;
+    }
+    
+    /* 增加触摸屏幕时的反馈效果 */
+    .skill-tag:active {
+        transform: scale(0.95);
+    }
+    
+    /* 优化页脚在小屏幕上的显示 */
+    .footer {
+        padding: var(--spacing-sm) 0;
+        font-size: 0.9rem;
+    }
+    
+    /* 确保section title在小屏幕上不会过大 */
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+/* 适配超小屏幕设备 */
+@media (max-width: 375px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .team-member {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .game-image {
+        height: 140px;
+    }
+    
+    .typewriter-container {
+        font-size: 1rem;
+    }
+    
+    /* 减小游戏卡片内容的字体大小 */
+    .game-content h3 {
+        font-size: 1.3rem;
+    }
+    
+    .game-content p {
+        font-size: 0.9rem;
+    }
+}
+
+/* 添加适配横屏模式的样式 */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        height: auto;
+        min-height: 450px;
+        padding: 80px 0 var(--spacing-md);
+    }
+    
+    .team-member {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .team-circle-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 
@@ -951,12 +1087,14 @@ a:hover {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.8s ease, transform 0.8s ease;
+    will-change: opacity, transform; /* 优化动画性能 */
 }
 
 .slide-in {
     opacity: 0;
     transform: translateX(-30px);
     transition: opacity 0.8s ease, transform 0.8s ease;
+    will-change: opacity, transform; /* 优化动画性能 */
 }
 
 .fade-in.visible, .slide-in.visible {
@@ -1042,4 +1180,29 @@ a:hover {
     .team-typewriter {
         min-height: 6.4rem; /* 在小屏幕上增加高度 */
     }
+}
+
+/* 页面加载时的过渡效果 */
+.page-transition {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.page-transition.loaded {
+    opacity: 1;
+}
+
+/* 触摸设备支持 */
+.touch-hover {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.team-member.touch-hover .member-skills {
+    max-height: 100px;
+    opacity: 1;
+}
+
+.skill-tag.touch-hover {
+    transform: scale(1);
 }
