@@ -1,0 +1,659 @@
+/* 全局样式和重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* 颜色方案 */
+    --primary-color: #1a237e;     /* 深蓝色 - 主色 */
+    --secondary-color: #00bcd4;   /* 青色 - 辅助色 */
+    --accent-color: #ff5722;      /* 橙红色 - 点缀色 */
+    --background-light: #f5f5f5;  /* 浅灰色背景 */
+    --background-dark: #212121;   /* 深灰色背景 */
+    --text-light: #ffffff;        /* 浅色文本 */
+    --text-dark: #333333;         /* 深色文本 */
+    
+    /* 字体 */
+    --heading-font: 'Poppins', sans-serif;
+    --body-font: 'Open Sans', sans-serif;
+    
+    /* 间距 */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 3rem;
+    --spacing-xl: 5rem;
+    
+    /* 边框 */
+    --border-radius: 8px;
+    
+    /* 动画时间 */
+    --transition-fast: 0.2s;
+    --transition-normal: 0.3s;
+    --transition-slow: 0.5s;
+}
+
+body {
+    font-family: var(--body-font);
+    line-height: 1.6;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--heading-font);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+    color: var(--primary-color);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color var(--transition-fast) ease;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+.btn {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--transition-fast) ease, transform var(--transition-fast) ease;
+}
+
+.btn:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    color: var(--text-light);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--primary-color);
+}
+
+.section {
+    padding: var(--spacing-lg) 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: var(--secondary-color);
+    margin: var(--spacing-xs) auto;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background-color: var(--primary-color);
+    padding: var(--spacing-sm) 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--heading-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-light);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: var(--spacing-md);
+}
+
+.nav-links a {
+    color: var(--text-light);
+    font-weight: 600;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--secondary-color);
+    transition: width var(--transition-normal) ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-light);
+    border-radius: 3px;
+    transition: all var(--transition-normal) ease;
+}
+
+/* 欢迎区样式 */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color), #304ffe, var(--secondary-color));
+    background-size: cover;
+    background-position: center;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    margin-top: 0;
+    padding-top: 70px; /* 为固定导航栏腾出空间 */
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-light);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.hero-btns {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+/* 游戏预览卡片区样式 */
+.games-showcase {
+    background-color: var(--background-light);
+    padding: var(--spacing-xl) 0;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.game-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
+}
+
+.game-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.game-image {
+    width: 100%;
+    height: 200px;
+    background-color: var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-normal) ease;
+}
+
+.game-card:hover .game-image img {
+    transform: scale(1.1);
+}
+
+.game-content {
+    padding: var(--spacing-sm);
+}
+
+.game-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-xs);
+}
+
+.game-content p {
+    color: #666;
+    margin-bottom: var(--spacing-sm);
+}
+
+.game-content .btn {
+    width: 100%;
+    text-align: center;
+}
+
+/* 团队展示区样式 */
+.team-showcase {
+    padding: var(--spacing-xl) 0;
+    background-color: white;
+    position: relative;
+}
+
+.team-circle-container {
+    position: relative;
+    width: 600px;
+    height: 600px;
+    margin: var(--spacing-xl) auto;
+}
+
+/* 团队标志中心圆圈 */
+.team-logo {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.team-logo i {
+    font-size: 3rem;
+    color: var(--text-light);
+}
+
+/* 团队成员卡片 */
+.team-member {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease, background-color var(--transition-normal) ease;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.team-member:hover {
+    transform: scale(1.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.95);
+    z-index: 20;
+}
+
+/* 添加彩色边框效果 */
+.team-member::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    top: 0;
+    left: 0;
+    transition: border-color var(--transition-normal) ease;
+}
+
+.team-member:nth-child(2):hover::after {
+    border-color: var(--primary-color);
+}
+
+.team-member:nth-child(3):hover::after {
+    border-color: var(--primary-color);
+}
+
+.team-member:nth-child(4):hover::after {
+    border-color: var(--secondary-color);
+}
+
+.team-member:nth-child(5):hover::after {
+    border-color: var(--accent-color);
+}
+
+.member-content {
+    text-align: center;
+    padding: var(--spacing-xs);
+}
+
+.member-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.member-skills {
+    font-size: 0.8rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-normal) ease, opacity var(--transition-normal) ease;
+    opacity: 0;
+}
+
+.team-member:hover .member-skills {
+    max-height: 100px;
+    opacity: 1;
+}
+
+/* 技能标签样式 */
+.skill-tag {
+    display: inline-block;
+    margin: 2px 0;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background-color: var(--secondary-color);
+    color: var(--text-light);
+    font-size: 0.75rem;
+    font-weight: 600;
+    transform: scale(0.9);
+    transition: transform var(--transition-fast) ease, background-color var(--transition-fast) ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.skill-tag:nth-child(odd) {
+    background-color: var(--primary-color);
+}
+
+.skill-tag:nth-child(even) {
+    background-color: var(--accent-color);
+}
+
+.team-member:hover .skill-tag {
+    transform: scale(1);
+}
+
+.skill-tag i {
+    margin-right: 4px;
+    font-size: 0.7rem;
+}
+
+/* 定位三个团队成员 */
+.team-member:nth-child(2) {
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.team-member:nth-child(3) {
+    top: 0%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.team-member:nth-child(4) {
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+/* 装饰性外环 */
+.team-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    height: 450px;
+    border: 3px dashed var(--secondary-color);
+    border-radius: 50%;
+    animation: rotate 30s linear infinite;
+}
+
+/* 动画关键帧 */
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.4);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        box-shadow: 0 0 0 10px rgba(0, 188, 212, 0);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 188, 212, 0);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 页脚样式 */
+.footer {
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    padding: var(--spacing-md) 0;
+    text-align: center;
+}
+
+.footer a {
+    color: var(--secondary-color);
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* 游戏详情页样式 */
+.game-details {
+    padding-top: 100px; /* 为导航栏腾出空间 */
+}
+
+.game-container {
+    background-color: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: var(--spacing-lg);
+}
+
+.game-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+}
+
+.game-header h1 {
+    margin-bottom: 0;
+}
+
+.back-btn {
+    margin-right: var(--spacing-sm);
+}
+
+.game-description {
+    margin-bottom: var(--spacing-md);
+}
+
+.game-frame {
+    width: 100%;
+    height: 500px;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    background-color: var(--background-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+
+.game-frame p {
+    color: #666;
+    text-align: center;
+}
+
+.game-controls {
+    background-color: var(--background-light);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+}
+
+.game-controls h3 {
+    margin-bottom: var(--spacing-xs);
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .team-circle-container {
+        width: 500px;
+        height: 500px;
+    }
+    
+    .team-ring {
+        width: 380px;
+        height: 380px;
+    }
+    
+    .team-member {
+        width: 130px;
+        height: 130px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: var(--primary-color);
+        flex-direction: column;
+        align-items: center;
+        padding: var(--spacing-sm) 0;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: clip-path var(--transition-normal) ease;
+    }
+    
+    .nav-links.active {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    .nav-links li {
+        margin: var(--spacing-xs) 0;
+    }
+    
+    .team-circle-container {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-md);
+    }
+    
+    .team-logo {
+        position: static;
+        transform: none;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .team-member {
+        position: static;
+        transform: none;
+    }
+    
+    .team-ring {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .hero-btns {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+    
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-frame {
+        height: 300px;
+    }
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迷你游戏合集 - 团队协作项目</title>
+    <meta name="description" content="一个展示多个精彩迷你游戏的静态网站，由团队合作开发">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">迷你游戏合集</a>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">首页</a></li>
+                <li><a href="#games">游戏</a></li>
+                <li><a href="#team">团队</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- 欢迎/英雄区 -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>探索精彩迷你游戏世界</h1>
+                <p>欢迎来到我们的迷你游戏合集。这里集合了由我们团队开发的各种有趣小游戏，带给您简单而愉快的游戏体验。</p>
+                <div class="hero-btns">
+                    <a href="#games" class="btn">浏览游戏</a>
+                    <a href="#team" class="btn btn-secondary">关于团队</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 游戏预览卡片区 -->
+    <section id="games" class="games-showcase section">
+        <div class="container">
+            <h2 class="section-title">精选游戏</h2>
+            <div class="games-grid">
+                <!-- 游戏1 - 已实现 -->
+                <div class="game-card fade-in">
+                    <div class="game-image" style="background-color: var(--primary-color); display: flex; align-items: center; justify-content: center;">
+                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">贪吃蛇游戏</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>贪吃蛇大作战</h3>
+                        <p>经典贪吃蛇游戏的创新版本，增加了更多障碍物和特殊物品。</p>
+                        <a href="game_snake.html" class="btn">开始游戏</a>
+                    </div>
+                </div>
+                
+                <!-- 游戏2 - 敬请期待 -->
+                <div class="game-card fade-in">
+                    <div class="game-image" style="background-color: var(--secondary-color); display: flex; align-items: center; justify-content: center;">
+                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">俄罗斯方块</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>俄罗斯方块</h3>
+                        <p>经典的俄罗斯方块游戏，挑战你的空间想象力和反应速度。</p>
+                        <a href="#" class="btn" style="background-color: #888;">敬请期待</a>
+                    </div>
+                </div>
+                
+                <!-- 游戏3 - 敬请期待 -->
+                <div class="game-card fade-in">
+                    <div class="game-image" style="background-color: var(--accent-color); display: flex; align-items: center; justify-content: center;">
+                        <span style="color: var(--text-light); font-size: 1.5rem; font-weight: bold;">记忆翻牌</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>记忆翻牌</h3>
+                        <p>考验记忆力的翻牌游戏，找出所有匹配的卡片对。</p>
+                        <a href="#" class="btn" style="background-color: #888;">敬请期待</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 团队展示区 -->
+    <section id="team" class="team-showcase section">
+        <div class="container">
+            <h2 class="section-title">开发团队</h2>
+            <div class="team-circle-container fade-in">
+                <!-- 装饰性外环 -->
+                <div class="team-ring"></div>
+                
+                <!-- 中心团队标志 -->
+                <div class="team-logo">
+                    <i class="fas fa-users"></i>
+                </div>
+                
+                <!-- 团队成员 1 - 黄梓桉 (左侧) -->
+                <div class="team-member">
+                    <div class="member-content">
+                        <h3>黄梓桉</h3>
+                        <div class="member-skills">
+                            <span class="skill-tag"><i class="fas fa-gamepad"></i> 游戏开发</span>
+                            <span class="skill-tag"><i class="fas fa-code"></i> 前端开发</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 团队成员 2 - 邓凯 (组长) (上方) -->
+                <div class="team-member">
+                    <div class="member-content">
+                        <h3>邓凯 (组长)</h3>
+                        <div class="member-skills">
+                            <span class="skill-tag"><i class="fas fa-cogs"></i> 核心开发</span>
+                            <span class="skill-tag"><i class="fas fa-server"></i> 网站部署</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 团队成员 3 - 黄景涛 (右侧) -->
+                <div class="team-member">
+                    <div class="member-content">
+                        <h3>黄景涛</h3>
+                        <div class="member-skills">
+                            <span class="skill-tag"><i class="fas fa-gamepad"></i> 游戏开发</span>
+                            <span class="skill-tag"><i class="fas fa-code"></i> 前端开发</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="team-description text-center fade-in">
+                <p>我们是一支充满激情的团队，致力于创造好玩、有趣的游戏体验。每位成员都贡献自己的专业技能，通过紧密合作，打造了这个迷你游戏合集网站。</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 迷你游戏合集团队 - 网站建设项目</p>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html> 
