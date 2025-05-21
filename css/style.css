@@ -309,7 +309,7 @@ a:hover {
 
 .game-image {
     width: 100%;
-    height: 220px; /* 稍微增加预览区域高度 */
+    height: 220px; /* 预览区域高度 */
     position: relative;
     overflow: hidden; /* 确保预览动画不溢出 */
     /* 移除原有的背景色和文字，由预览动画填充 */
@@ -935,7 +935,7 @@ a:hover {
         width: 450px;
         height: 450px;
         transform: scale(0.9);
-        /* 保留原来的相对定位，不改变为flex布局 */
+        margin: var(--spacing-lg) auto; /* 确保在较小屏幕上仍然居中 */
     }
     
     .team-ring {
@@ -949,8 +949,13 @@ a:hover {
         height: 130px;
     }
     
-    .game-image { /* 移动端适当减小预览区高度 */
-        height: 180px;
+    .game-image { 
+        height: 200px; /* 稍微调整高度，不要减小太多 */
+    }
+    
+    /* 确保预览内容的比例和位置在移动端保持正确 */
+    .snake-static-preview, .tetris-grid-preview, .memory-card-preview-wrapper {
+        transform: scale(0.95); /* 轻微缩小整体比例 */
     }
     
     /* 确保hero区域在移动设备上有足够高度 */
@@ -970,21 +975,20 @@ a:hover {
         display: inline-block;
     }
     
-    /* 更小屏幕上进一步调整技能标签 */
+    /* 调整技能标签样式，确保在移动端也能正常显示 */
     .member-skills {
-        font-size: 0.6rem;
-        max-width: 90px;
+        font-size: 0.65rem; /* 稍微增大字体，提高可读性 */
+        max-width: 100px; /* 增加宽度，减少文本截断 */
     }
     
     .skill-tag {
-        padding: 1px 5px;
-        font-size: 0.6rem;
-        display: block; /* 标签垂直排列 */
-        margin: 2px auto;
-        width: fit-content;
+        padding: 2px 6px; /* 增加内边距，使标签更易触摸 */
+        font-size: 0.65rem;
+        margin: 3px 2px; /* 增加外边距，防止标签挤在一起 */
+        display: inline-block; /* 保持水平排列 */
     }
     
-    /* 增加团队成员卡片中文本可见性 */
+    /* 增强触摸体验 */
     .team-member:hover .member-skills,
     .team-member:active .member-skills {
         max-height: 100px;
@@ -1020,15 +1024,16 @@ a:hover {
         height: 300px;
     }
     
-    .game-image { /* 进一步减小预览区高度 */
-        height: 160px;
+    .game-image { 
+        height: 180px; /* 适当减小但保持合理比例 */
     }
     
-    /* 更小屏幕上进一步缩小团队展示部分 */
+    /* 更小屏幕上调整团队展示部分，仍然保持圆形布局 */
     .team-circle-container {
         width: 350px;
         height: 350px;
         transform: scale(0.8);
+        margin: var(--spacing-md) auto; /* 减少外边距以适应较小空间 */
     }
     
     .team-ring {
@@ -1041,37 +1046,38 @@ a:hover {
         height: 110px;
     }
     
+    /* 记忆卡片游戏预览优化 */
     .memory-card-preview-wrapper {
-        width: 120px; /* 缩小记忆卡片预览 */
+        width: 130px; /* 稍微调整宽度 */
+        transform: scale(0.9); /* 整体缩小 */
     }
     
     .memory-card-preview {
-        width: 50px;
-        height: 70px;
+        width: 55px;
+        height: 75px;
     }
     
-    .memory-card-preview-front, .memory-card-preview-back {
-        font-size: 1.5rem;
-    }
-    
-    .memory-card-preview-back i {
-        font-size: 1.7rem;
-    }
-
+    /* 俄罗斯方块预览优化 */
     .tetris-grid-preview {
-        width: 100px;
-        height: 150px;
-        background-size: 10px 10px;
+        width: 110px;
+        height: 160px;
+        transform: scale(0.85);
+        background-size: 11px 11px;
     }
     
     .tetromino-preview {
-        grid-template-columns: repeat(4, 8px);
-        grid-template-rows: repeat(4, 8px);
+        grid-template-columns: repeat(4, 9px);
+        grid-template-rows: repeat(4, 9px);
     }
     
     .tetromino-preview div {
-        width: 8px;
-        height: 8px;
+        width: 9px;
+        height: 9px;
+    }
+    
+    /* 贪吃蛇预览优化 */
+    .snake-static-preview {
+        transform: scale(0.85);
     }
     
     /* 确保成员内容居中且紧凑 */
@@ -1092,37 +1098,41 @@ a:hover {
         font-size: 0.75em;
     }
     
-    /* 修改技能标签样式，使其在移动端更紧凑 */
+    /* 调整技能标签在小屏幕上的显示 */
     .member-skills {
         font-size: 0.6rem;
         max-width: 90px;
         margin: 0 auto;
         max-height: 0;
+        transition: max-height var(--transition-normal) ease, opacity var(--transition-normal) ease;
     }
     
     .team-member:hover .member-skills,
-    .team-member:active .member-skills {
+    .team-member:active .member-skills,
+    .team-member:focus .member-skills {
         max-height: 100px;
         opacity: 1;
     }
     
+    /* 垂直排列技能标签，提高可读性 */
     .skill-tag {
-        padding: 1px 4px;
-        font-size: 0.55rem;
-        display: block; /* 标签垂直排列 */
-        margin: 2px auto;
+        padding: 2px 5px;
+        font-size: 0.6rem;
+        display: block; /* 垂直排列 */
+        margin: 3px auto;
         width: fit-content;
         white-space: nowrap; /* 防止标签文字换行 */
-        transform: scale(0.95);
     }
     
-    .team-member:hover .skill-tag {
+    .team-member:hover .skill-tag,
+    .team-member:active .skill-tag {
         transform: scale(1);
     }
     
-    /* 增加触摸屏幕时的反馈效果 */
+    /* 改善触摸反馈 */
     .skill-tag:active {
         transform: scale(0.95);
+        opacity: 0.9;
     }
     
     /* 优化页脚在小屏幕上的显示 */
@@ -1143,11 +1153,12 @@ a:hover {
         font-size: 1.8rem;
     }
     
-    /* 在超小屏幕上进一步缩小团队展示部分 */
+    /* 在超小屏幕上微调团队展示部分 */
     .team-circle-container {
         width: 300px;
         height: 300px;
         transform: scale(0.7);
+        overflow: visible; /* 确保内容不被裁剪 */
     }
     
     .team-member {
@@ -1165,7 +1176,7 @@ a:hover {
     }
     
     .game-image {
-        height: 140px;
+        height: 160px; /* 在最小屏幕上保持合理高度 */
     }
     
     .typewriter-container {
@@ -1181,20 +1192,41 @@ a:hover {
         font-size: 0.9rem;
     }
     
-    /* 超小屏幕上的技能标签 */
+    /* 优化技能标签在超小屏幕上的显示 */
     .member-skills {
         font-size: 0.55rem;
-        max-width: 80px;
+        max-width: 85px; /* 增加宽度，确保内容正常显示 */
     }
     
     .skill-tag {
-        padding: 1px 3px;
-        font-size: 0.5rem;
+        padding: 2px 4px;
+        font-size: 0.55rem;
+        margin: 2px auto;
     }
     
     /* 优化超小屏幕成员名称显示 */
     .team-member .member-content h3 {
         font-size: 0.85rem;
+    }
+    
+    /* 进一步优化各游戏预览比例 */
+    .snake-static-preview {
+        transform: scale(0.8);
+    }
+    
+    .tetris-grid-preview {
+        transform: scale(0.75);
+    }
+    
+    .memory-card-preview-wrapper {
+        transform: scale(0.8);
+    }
+    
+    /* 确保预览内容居中 */
+    .preview-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -1340,10 +1372,17 @@ a:hover {
     .team-member:active .member-skills {
         max-height: 100px;
         opacity: 1;
+        transition-delay: 0s; /* 移除延迟，立即显示 */
     }
     
     .team-member:active {
         transform: scale(1.05);
+        z-index: 100; /* 确保活动项在顶层 */
+    }
+    
+    .team-member:active .skill-tag {
+        transform: scale(1);
+        transition-delay: 0s; /* 移除延迟，立即显示 */
     }
 }
 

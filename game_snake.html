@@ -325,6 +325,38 @@
                 width: 100%;
             }
         }
+
+        /* 添加小屏幕设备优化 */
+        @media (max-width: 375px) {
+            .snake-canvas-container {
+                max-width: 320px; /* 增大小屏幕的游戏区域 */
+                margin: 0 auto;
+            }
+
+            .control-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+
+            .snake-controls {
+                width: 190px;
+                height: 140px;
+            }
+
+            /* 确保按钮在小屏幕上更易点击 */
+            .difficulty-btn {
+                padding: 10px 18px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* 在较大的移动设备上展示更大的游戏区域 */
+        @media (min-width: 400px) and (max-width: 576px) {
+            .snake-canvas-container {
+                max-width: 500px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -373,7 +405,7 @@
                             <strong>最高分：</strong> <span id="high-score-display">0</span>
                         </div>
                         <div class="stat">
-                            <strong>延时(ms)：</strong> <span id="speed-display">200</span>
+                            <strong>速度：</strong> <span id="speed-display">慢速</span> (<span id="delay-display">250</span>ms)
                         </div>
                     </div>
                     
@@ -779,6 +811,8 @@
                 
                 // 碰到墙
                 if(head.x < 0 || head.y < 0 || head.x >= gameSettings.gridSize || head.y >= gameSettings.gridSize) {
+                    // 在结束游戏前添加碰墙的视觉效果
+                    showWallCollisionEffect(head);
                     endGame('wall');
                     return;
                 }
@@ -786,10 +820,86 @@
                 // 碰到自己
                 for(let i = 1; i < gameState.snake.length; i++) {
                     if(head.x === gameState.snake[i].x && head.y === gameState.snake[i].y) {
+                        // 在结束游戏前添加自碰撞的视觉效果
+                        showSelfCollisionEffect(head, i);
                         endGame('self');
                         return;
                     }
                 }
+            }
+            
+            // 添加墙碰撞的视觉效果
+            function showWallCollisionEffect(head) {
+                // 绘制红色边框表示撞墙
+                const cellSize = canvas.width / gameSettings.gridSize;
+                ctx.strokeStyle = '#e74c3c'; // 红色
+                ctx.lineWidth = 8;
+                
+                // 确定撞到了哪面墙
+                if(head.x < 0) { // 左墙
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(0, canvas.height);
+                    ctx.stroke();
+                } else if(head.x >= gameSettings.gridSize) { // 右墙
+                    ctx.beginPath();
+                    ctx.moveTo(canvas.width, 0);
+                    ctx.lineTo(canvas.width, canvas.height);
+                    ctx.stroke();
+                } else if(head.y < 0) { // 上墙
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(canvas.width, 0);
+                    ctx.stroke();
+                } else if(head.y >= gameSettings.gridSize) { // 下墙
+                    ctx.beginPath();
+                    ctx.moveTo(0, canvas.height);
+                    ctx.lineTo(canvas.width, canvas.height);
+                    ctx.stroke();
+                }
+                
+                // 绘制蛇头闪烁效果
+                const headX = gameState.snake[0].x * cellSize;
+                const headY = gameState.snake[0].y * cellSize;
+                
+                ctx.fillStyle = '#e74c3c'; // 红色
+                drawRoundedRect(ctx, headX, headY, cellSize, cellSize, cellSize/5);
+            }
+            
+            // 添加自碰撞的视觉效果
+            function showSelfCollisionEffect(head, collidedSegmentIndex) {
+                const cellSize = canvas.width / gameSettings.gridSize;
+                
+                // 高亮显示碰撞的身体部分
+                const segment = gameState.snake[collidedSegmentIndex];
+                const segX = segment.x * cellSize;
+                const segY = segment.y * cellSize;
+                
+                ctx.fillStyle = '#e67e22'; // 橙色
+                drawRoundedRect(ctx, segX, segY, cellSize, cellSize, cellSize/5);
+                
+                // 高亮显示蛇头
+                const headX = head.x * cellSize;
+                const headY = head.y * cellSize;
+                
+                ctx.fillStyle = '#e74c3c'; // 红色
+                drawRoundedRect(ctx, headX, headY, cellSize, cellSize, cellSize/5);
+            }
+            
+            // 辅助函数：绘制圆角矩形
+            function drawRoundedRect(ctx, x, y, width, height, radius) {
+                ctx.beginPath();
+                ctx.moveTo(x + radius, y);
+                ctx.lineTo(x + width - radius, y);
+                ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+                ctx.lineTo(x + width, y + height - radius);
+                ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                ctx.lineTo(x + radius, y + height);
+                ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+                ctx.lineTo(x, y + radius);
+                ctx.quadraticCurveTo(x, y, x + radius, y);
+                ctx.closePath();
+                ctx.fill();
             }
             
             // 结束游戏
@@ -822,9 +932,11 @@
                     messageElement.innerHTML = `游戏结束！<br>最终得分: <span id="final-score">${gameState.score}</span>`;
                 }
                 
-                // 显示弹窗
-                finalScore.textContent = gameState.score;
-                gameOverModal.classList.add('active');
+                // 显示弹窗，但延迟一下让用户看到碰撞效果
+                setTimeout(() => {
+                    finalScore.textContent = gameState.score;
+                    gameOverModal.classList.add('active');
+                }, 800);
             }
             
             // 暂停/继续游戏
@@ -844,8 +956,14 @@
                 // 更新速度
                 gameSettings.speed = parseInt(this.dataset.speed);
                 
-                // 更新速度显示 - 直接显示延时毫秒数
-                speedDisplay.textContent = gameSettings.speed;
+                // 更新速度显示 - 显示文字和数值
+                document.getElementById('delay-display').textContent = gameSettings.speed;
+                
+                // 根据延迟更新速度文本描述
+                let speedText = "慢速";
+                if (gameSettings.speed <= 80) speedText = "快速";
+                else if (gameSettings.speed <= 150) speedText = "中速";
+                speedDisplay.textContent = speedText;
                 
                 // 如果游戏正在运行，重新启动游戏循环
                 if(gameState.snake.length > 0 && !gameState.gameOver) {
@@ -970,8 +1088,9 @@
                     e.preventDefault();
                 }, { passive: false });
                 
-                // 设置初始难度并显示对应的延时毫秒数
-                speedDisplay.textContent = gameSettings.speed;
+                // 设置初始难度并显示对应的文字与延时毫秒数
+                document.getElementById('delay-display').textContent = gameSettings.speed;
+                speedDisplay.textContent = "慢速";
                 
                 // 加载最高分
                 highScoreDisplay.textContent = gameState.highScore;

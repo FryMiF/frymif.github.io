@@ -15,8 +15,23 @@
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 粒子效果Canvas样式 */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* 确保不影响下方元素的点击 */
+            z-index: 9999; /* 确保显示在最上层 */
+        }
+    </style>
 </head>
 <body class="page-transition">
+    <!-- 粒子效果Canvas -->
+    <canvas id="particles-canvas"></canvas>
+    
     <nav class="navbar">
         <div class="container">
             <a href="index.html" class="logo">迷你游戏合集</a>
@@ -201,5 +216,168 @@
     </footer>
     
     <script src="js/script.js"></script>
+    <script>
+        // 粒子效果代码
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 调整Canvas尺寸
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            // 初始调整和监听窗口大小变化
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 粒子类
+            class Particle {
+                constructor(x, y, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.color = color;
+                    this.size = Math.random() * 5 + 2; // 2-7px大小
+                    this.speedX = Math.random() * 6 - 3; // -3到3的随机速度
+                    this.speedY = Math.random() * 6 - 3;
+                    this.life = 100; // 粒子寿命
+                    this.alpha = 1; // 透明度
+                    this.gravity = 0.1; // 重力效果
+                    this.shape = Math.random() > 0.7 ? 'star' : 'circle'; // 30%的概率是星形，70%是圆形
+                    this.rotation = Math.random() * Math.PI * 2; // 随机旋转角度
+                    this.rotationSpeed = Math.random() * 0.1 - 0.05; // 旋转速度
+                }
+                
+                // 更新粒子状态
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                    
+                    // 添加重力影响
+                    this.speedY += this.gravity;
+                    
+                    // 减少生命值
+                    this.life -= 1.5;
+                    
+                    // 粒子逐渐变小和透明
+                    if (this.size > 0.1) this.size -= 0.05;
+                    this.alpha = this.life / 100;
+                    
+                    // 更新旋转
+                    this.rotation += this.rotationSpeed;
+                }
+                
+                // 绘制粒子
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    
+                    if (this.shape === 'circle') {
+                        // 绘制圆形
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.closePath();
+                        ctx.fill();
+                    } else {
+                        // 绘制星形
+                        ctx.translate(this.x, this.y);
+                        ctx.rotate(this.rotation);
+                        this.drawStar(0, 0, 5, this.size * 0.5, this.size);
+                        ctx.translate(-this.x, -this.y);
+                    }
+                    
+                    ctx.restore();
+                }
+                
+                // 辅助方法：绘制星形
+                drawStar(cx, cy, spikes, innerRadius, outerRadius) {
+                    let rot = Math.PI / 2 * 3;
+                    let x = cx;
+                    let y = cy;
+                    let step = Math.PI / spikes;
+                    
+                    ctx.beginPath();
+                    for (let i = 0; i < spikes; i++) {
+                        x = cx + Math.cos(rot) * outerRadius;
+                        y = cy + Math.sin(rot) * outerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+                        
+                        x = cx + Math.cos(rot) * innerRadius;
+                        y = cy + Math.sin(rot) * innerRadius;
+                        ctx.lineTo(x, y);
+                        rot += step;
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            }
+            
+            // 粒子数组
+            let particles = [];
+            
+            // 产生随机颜色
+            function getRandomColor() {
+                const colors = [
+                    '#ff5252', // 红色
+                    '#ff9800', // 橙色
+                    '#ffeb3b', // 黄色
+                    '#4caf50', // 绿色
+                    '#2196f3', // 蓝色
+                    '#9c27b0', // 紫色
+                    '#e91e63', // 粉色
+                    '#00bcd4'  // 青色
+                ];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            // 创建粒子
+            function createParticles(x, y) {
+                // 根据设备性能决定粒子数量
+                const isMobile = window.innerWidth <= 768;
+                const particleCount = isMobile ? 15 : 30; // 移动设备少一些粒子，提高性能
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const color = getRandomColor();
+                    particles.push(new Particle(x, y, color));
+                }
+            }
+            
+            // 动画循环
+            function animate() {
+                requestAnimationFrame(animate);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 更新和绘制粒子
+                for (let i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                    
+                    // 移除生命周期结束的粒子
+                    if (particles[i].life <= 0) {
+                        particles.splice(i, 1);
+                        i--;
+                    }
+                }
+            }
+            
+            // 监听鼠标点击
+            document.addEventListener('click', function(e) {
+                createParticles(e.clientX, e.clientY);
+            });
+            
+            // 监听触摸事件（移动设备）
+            document.addEventListener('touchstart', function(e) {
+                // 不阻止默认行为，只创建粒子效果
+                const touch = e.touches[0];
+                createParticles(touch.clientX, touch.clientY);
+            }, { passive: true });
+            
+            // 启动动画
+            animate();
+        });
+    </script>
 </body>
 </html>
