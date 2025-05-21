@@ -19,7 +19,6 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* 贪吃蛇游戏特定样式 */
-        /* 删除覆盖导航栏样式的部分，使用全局样式 */
         
         /* 调整游戏详情区域 */
         .game-details {
@@ -74,13 +73,13 @@
         
         .control-btn {
             position: absolute;
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background-color: var(--primary-color);
             color: var(--text-light);
             border: none;
-            font-size: 26px;
+            font-size: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -141,13 +140,13 @@
         }
         
         .difficulty-btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: var(--border-radius);
             border: none;
             background-color: var(--background-light);
             cursor: pointer;
             font-weight: bold;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
         }
         
@@ -180,10 +179,10 @@
         
         .modal-content {
             background-color: white;
-            padding: 30px;
+            padding: 35px;
             border-radius: var(--border-radius);
             text-align: center;
-            max-width: 400px;
+            max-width: 450px;
             width: 90%;
             transform: translateY(-20px);
             transition: transform 0.3s ease;
@@ -191,6 +190,16 @@
         
         .game-over-modal.active .modal-content {
             transform: translateY(0);
+        }
+        
+        .game-over-modal h2 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .game-over-modal p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
         }
         
         .game-over-icon {
@@ -284,14 +293,14 @@
             }
             
             .control-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
             }
             
             .snake-controls {
-                width: 180px;
-                height: 130px;
+                width: 200px;
+                height: 150px;
             }
             
             .game-buttons {
@@ -370,9 +379,9 @@
                     
                     <!-- 难度选择 -->
                     <div class="difficulty-selector">
-                        <button class="difficulty-btn active" data-speed="200">简单</button>
-                        <button class="difficulty-btn" data-speed="120">中等</button>
-                        <button class="difficulty-btn" data-speed="70">困难</button>
+                        <button class="difficulty-btn active" data-speed="250">简单</button>
+                        <button class="difficulty-btn" data-speed="150">中等</button>
+                        <button class="difficulty-btn" data-speed="80">困难</button>
                     </div>
                     
                     <!-- 游戏画布 -->
@@ -402,6 +411,7 @@
                             <li><i class="fas fa-mobile-alt"></i> 移动端：点击屏幕下方的方向按钮控制</li>
                             <li><i class="fas fa-apple-alt"></i> 吃到食物：增加1分，蛇身变长</li>
                             <li><i class="fas fa-skull-crossbones"></i> 游戏结束：碰到墙壁或自己的身体</li>
+                            <li><i class="fas fa-bolt"></i> 游戏技巧：不要急着改变方向，保持冷静思考</li>
                         </ul>
                     </div>
                 </div>
@@ -439,7 +449,7 @@
             const canvas = document.getElementById('snake-canvas');
             const ctx = canvas.getContext('2d');
             
-            // 获取元素
+            // 获取DOM元素
             const scoreDisplay = document.getElementById('score-display');
             const highScoreDisplay = document.getElementById('high-score-display');
             const speedDisplay = document.getElementById('speed-display');
@@ -449,6 +459,7 @@
             const finalScore = document.getElementById('final-score');
             const playAgainBtn = document.getElementById('play-again-btn');
             const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+            const exitBtn = document.getElementById('exit-btn');
             
             // 移动端控制按钮
             const btnUp = document.getElementById('btn-up');
@@ -459,7 +470,7 @@
             // 游戏设置和状态
             let gameSettings = {
                 gridSize: 17, // 网格大小减小，使单元格更大更清晰
-                speed: 200,   // 初始速度(毫秒)与简单难度匹配
+                speed: 250,   // 初始速度(毫秒)减慢，适合初始玩家
                 snakeColor: '#38761d',
                 foodColor: '#e67e22',
                 gridColor: 'rgba(0, 0, 0, 0.05)',
@@ -927,7 +938,7 @@
                 });
                 
                 // 添加退出按钮事件
-                document.getElementById('exit-btn').addEventListener('click', function() {
+                exitBtn.addEventListener('click', function() {
                     gameOverModal.classList.remove('active');
                     // 重置，但不立即开始游戏
                     gameState.gameOver = true;
