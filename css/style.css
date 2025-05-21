@@ -187,6 +187,26 @@ a:hover {
     width: 100%;
 }
 
+/* GitHub链接样式 */
+.github-link {
+    margin-left: var(--spacing-md);
+}
+
+.github-link a {
+    font-size: 1.5rem;
+    color: var(--text-light);
+    transition: transform var(--transition-normal) ease, color var(--transition-normal) ease;
+}
+
+.github-link a:hover {
+    color: var(--accent-color);
+    transform: scale(1.2);
+}
+
+.github-link a::after {
+    display: none;
+}
+
 .menu-toggle {
     display: none;
     flex-direction: column;
@@ -941,6 +961,15 @@ a:hover {
         padding-top: 80px; /* 增加顶部padding，确保内容不被导航栏遮挡 */
         padding-bottom: var(--spacing-lg);
     }
+
+    .github-link {
+        margin: 0;
+    }
+    
+    .github-link a {
+        padding: 10px;
+        display: inline-block;
+    }
 }
 
 @media (max-width: 576px) {
@@ -1205,4 +1234,14 @@ a:hover {
 
 .skill-tag.touch-hover {
     transform: scale(1);
+}
+
+/* 游戏详情页样式 */
+.game-header h1 {
+    font-size: 2.2rem;
+}
+
+.game-description p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
 }
