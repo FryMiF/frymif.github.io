@@ -53,13 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(typeEffect, typingSpeed);
         }
         
-        // 如果是移动设备，直接显示全部文本，不使用打字效果
-        if (window.innerWidth <= 576) {
-            typewriterElement.textContent = fullText;
-        } else {
-            // 开始打字效果
-            typeEffect();
-        }
+        // 无论设备类型，都启用打字效果
+        typeEffect();
     }
     
     // 打字机效果 - 团队描述
@@ -130,14 +125,9 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(typeTeamEffect, typingSpeed);
         }
         
-        // 如果是移动设备，直接显示全部文本，不使用打字效果
-        if (window.innerWidth <= 576) {
-            teamTypewriterElement.innerHTML = coloredTextHTML;
-        } else {
-            // 开始打字效果
-            teamTypewriterElement.innerHTML = '';
-            setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
-        }
+        // 无论设备类型，都启用打字效果
+        teamTypewriterElement.innerHTML = '';
+        setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
     }
     
     // 添加平滑滚动到锚点链接
