@@ -685,6 +685,12 @@ a:hover {
     margin-bottom: 5px;
 }
 
+.member-content h3 small {
+    font-size: 0.8em;
+    opacity: 0.8;
+    font-weight: normal;
+}
+
 .member-skills {
     font-size: 0.8rem;
     max-height: 0;
@@ -1031,8 +1037,8 @@ a:hover {
     }
     
     .team-member {
-        width: 100px;
-        height: 100px;
+        width: 110px;
+        height: 110px;
     }
     
     .memory-card-preview-wrapper {
@@ -1068,25 +1074,50 @@ a:hover {
         height: 8px;
     }
     
-    /* 更小屏幕上进一步调整技能标签 */
+    /* 确保成员内容居中且紧凑 */
+    .member-content {
+        padding: 5px 3px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* 在小屏幕设备上为团队成员调整字体大小 */
+    .team-member .member-content h3 {
+        font-size: 0.9rem;
+        margin-bottom: 3px;
+        white-space: nowrap; /* 防止名字换行 */
+    }
+    
+    .team-member .member-content h3 small {
+        font-size: 0.75em;
+    }
+    
+    /* 修改技能标签样式，使其在移动端更紧凑 */
     .member-skills {
         font-size: 0.6rem;
         max-width: 90px;
+        margin: 0 auto;
+        max-height: 0;
     }
     
-    .skill-tag {
-        padding: 1px 5px;
-        font-size: 0.6rem;
-        display: block; /* 标签垂直排列 */
-        margin: 2px auto;
-        width: fit-content;
-    }
-    
-    /* 增加团队成员卡片中文本可见性 */
     .team-member:hover .member-skills,
     .team-member:active .member-skills {
         max-height: 100px;
         opacity: 1;
+    }
+    
+    .skill-tag {
+        padding: 1px 4px;
+        font-size: 0.55rem;
+        display: block; /* 标签垂直排列 */
+        margin: 2px auto;
+        width: fit-content;
+        white-space: nowrap; /* 防止标签文字换行 */
+        transform: scale(0.95);
+    }
+    
+    .team-member:hover .skill-tag {
+        transform: scale(1);
     }
     
     /* 增加触摸屏幕时的反馈效果 */
@@ -1107,7 +1138,6 @@ a:hover {
     }
 }
 
-/* 适配超小屏幕设备 */
 @media (max-width: 375px) {
     .hero h1 {
         font-size: 1.8rem;
@@ -1121,8 +1151,8 @@ a:hover {
     }
     
     .team-member {
-        width: 90px;
-        height: 90px;
+        width: 100px;
+        height: 100px;
     }
     
     .team-logo {
@@ -1158,8 +1188,13 @@ a:hover {
     }
     
     .skill-tag {
-        padding: 1px 4px;
-        font-size: 0.55rem;
+        padding: 1px 3px;
+        font-size: 0.5rem;
+    }
+    
+    /* 优化超小屏幕成员名称显示 */
+    .team-member .member-content h3 {
+        font-size: 0.85rem;
     }
 }
 
