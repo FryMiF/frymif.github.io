@@ -37,7 +37,7 @@
         .snake-canvas-container {
             position: relative;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
             aspect-ratio: 1/1;
             background-color: var(--snake-bg);
@@ -181,6 +181,13 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border-radius: 50%;
+            background-color: var(--background-light);
+            color: var(--accent-color);
         }
         
         .modal-buttons {
@@ -230,7 +237,7 @@
             }
             
             .snake-canvas-container {
-                max-width: 400px;
+                max-width: 550px;
             }
             
             .instruction-box {
@@ -247,7 +254,7 @@
             }
             
             .snake-canvas-container {
-                max-width: 320px;
+                max-width: 450px;
             }
             
             .control-btn {
@@ -326,7 +333,7 @@
                             <strong>最高分：</strong> <span id="high-score-display">0</span>
                         </div>
                         <div class="stat">
-                            <strong>速度：</strong> <span id="speed-display">1</span>
+                            <strong>延时(ms)：</strong> <span id="speed-display">200</span>
                         </div>
                     </div>
                     
@@ -420,8 +427,8 @@
             
             // 游戏设置和状态
             let gameSettings = {
-                gridSize: 20, // 网格大小
-                speed: 150,   // 初始速度(毫秒)，值越小速度越快，调整为更慢的速度
+                gridSize: 17, // 网格大小减小，使单元格更大更清晰
+                speed: 200,   // 初始速度(毫秒)与简单难度匹配
                 snakeColor: '#38761d',
                 foodColor: '#e67e22',
                 gridColor: 'rgba(0, 0, 0, 0.05)',
@@ -758,15 +765,18 @@
                 
                 if(reason === 'wall') {
                     // 碰到墙的图标和消息
-                    iconElement.innerHTML = `<img src="https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/apple/64/1f6e1.png" alt="撞墙" width="80" height="80">`;
+                    iconElement.innerHTML = `<i class="fas fa-ban"></i>`;
+                    iconElement.style.color = "#e74c3c"; // 红色
                     messageElement.innerHTML = `你撞到了墙！<br>最终得分: <span id="final-score">${gameState.score}</span>`;
                 } else if(reason === 'self') {
                     // 碰到自己的图标和消息
-                    iconElement.innerHTML = `<img src="https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/apple/64/1f635.png" alt="撞到自己" width="80" height="80">`;
+                    iconElement.innerHTML = `<i class="fas fa-dizzy"></i>`;
+                    iconElement.style.color = "#e67e22"; // 橙色
                     messageElement.innerHTML = `你咬到了自己！<br>最终得分: <span id="final-score">${gameState.score}</span>`;
                 } else {
                     // 默认图标和消息
-                    iconElement.innerHTML = `<img src="https://cdn.staticfile.org/emoji-datasource-apple/14.0.0/img/apple/64/1f480.png" alt="游戏结束" width="80" height="80">`;
+                    iconElement.innerHTML = `<i class="fas fa-skull-crossbones"></i>`;
+                    iconElement.style.color = "#7f8c8d"; // 灰色
                     messageElement.innerHTML = `游戏结束！<br>最终得分: <span id="final-score">${gameState.score}</span>`;
                 }
                 
@@ -792,9 +802,8 @@
                 // 更新速度
                 gameSettings.speed = parseInt(this.dataset.speed);
                 
-                // 更新速度显示
-                const speedLevel = Math.round((100 - gameSettings.speed) / 20) + 1;
-                speedDisplay.textContent = speedLevel;
+                // 更新速度显示 - 直接显示延时毫秒数
+                speedDisplay.textContent = gameSettings.speed;
                 
                 // 如果游戏正在运行，重新启动游戏循环
                 if(gameState.snake.length > 0 && !gameState.gameOver) {
@@ -919,9 +928,8 @@
                     e.preventDefault();
                 }, { passive: false });
                 
-                // 设置初始难度
-                const speedLevel = Math.round((100 - gameSettings.speed) / 20) + 1;
-                speedDisplay.textContent = speedLevel;
+                // 设置初始难度并显示对应的延时毫秒数
+                speedDisplay.textContent = gameSettings.speed;
                 
                 // 加载最高分
                 highScoreDisplay.textContent = gameState.highScore;
