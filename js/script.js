@@ -240,55 +240,35 @@ document.addEventListener('DOMContentLoaded', function() {
         const teamLogo = teamContainer.querySelector('.team-logo');
         const teamRing = teamContainer.querySelector('.team-ring');
         
-        // 如果是移动设备视图
-        if (window.innerWidth <= 768) {
-            // 重置定位样式
-            teamMembers.forEach(member => {
-                member.style.top = 'auto';
-                member.style.left = 'auto';
-                member.style.right = 'auto';
-                member.style.transform = 'none';
-            });
+        // 无论是否移动设备，都保持圆形布局
+        // 手动设置成员位置以确保正确显示
+        if (teamMembers.length >= 3) {
+            // 第一个成员 - 左侧
+            teamMembers[0].style.top = '50%';
+            teamMembers[0].style.left = '0';
+            teamMembers[0].style.right = 'auto';
+            teamMembers[0].style.transform = 'translateY(-50%)';
             
-            if (teamLogo) {
-                teamLogo.style.position = 'static';
-                teamLogo.style.transform = 'none';
-            }
+            // 第二个成员 - 上部
+            teamMembers[1].style.top = '0%';
+            teamMembers[1].style.left = '50%';
+            teamMembers[1].style.right = 'auto';
+            teamMembers[1].style.transform = 'translateX(-50%)';
             
-            if (teamRing) {
-                teamRing.style.display = 'none';
-            }
-        } else {
-            // 恢复原始定位（通过CSS类实现）
-            if (teamLogo) {
-                teamLogo.style.position = 'absolute';
-                teamLogo.style.transform = 'translate(-50%, -50%)';
-            }
-            
-            if (teamRing) {
-                teamRing.style.display = 'block';
-            }
-            
-            // 手动设置成员位置以确保正确显示
-            if (teamMembers.length >= 3) {
-                // 第一个成员 - 左侧
-                teamMembers[0].style.top = '50%';
-                teamMembers[0].style.left = '0';
-                teamMembers[0].style.right = 'auto';
-                teamMembers[0].style.transform = 'translateY(-50%)';
-                
-                // 第二个成员 - 上部
-                teamMembers[1].style.top = '0%';
-                teamMembers[1].style.left = '50%';
-                teamMembers[1].style.right = 'auto';
-                teamMembers[1].style.transform = 'translateX(-50%)';
-                
-                // 第三个成员 - 右侧
-                teamMembers[2].style.top = '50%';
-                teamMembers[2].style.left = 'auto';
-                teamMembers[2].style.right = '0';
-                teamMembers[2].style.transform = 'translateY(-50%)';
-            }
+            // 第三个成员 - 右侧
+            teamMembers[2].style.top = '50%';
+            teamMembers[2].style.left = 'auto';
+            teamMembers[2].style.right = '0';
+            teamMembers[2].style.transform = 'translateY(-50%)';
+        }
+        
+        if (teamLogo) {
+            teamLogo.style.position = 'absolute';
+            teamLogo.style.transform = 'translate(-50%, -50%)';
+        }
+        
+        if (teamRing) {
+            teamRing.style.display = 'block';
         }
     }
     

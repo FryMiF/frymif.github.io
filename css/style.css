@@ -924,32 +924,25 @@ a:hover {
         width: 100%;
     }
     
+    /* 修改团队展示部分，保持圆形布局，整体缩小 */
     .team-circle-container {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: var(--spacing-md);
-    }
-    
-    .team-logo {
-        position: static;
-        transform: none;
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .team-member {
-        position: static;
-        transform: none;
-        width: 180px; /* 在移动设备上增加团队成员卡片大小 */
-        height: 180px;
+        width: 450px;
+        height: 450px;
+        transform: scale(0.9);
+        /* 保留原来的相对定位，不改变为flex布局 */
     }
     
     .team-ring {
-        display: none;
+        width: 340px;
+        height: 340px;
     }
-
+    
+    .team-member {
+        /* 保持原有的绝对定位和变换效果 */
+        width: 130px;
+        height: 130px;
+    }
+    
     .game-image { /* 移动端适当减小预览区高度 */
         height: 180px;
     }
@@ -1002,6 +995,23 @@ a:hover {
     
     .game-image { /* 进一步减小预览区高度 */
         height: 160px;
+    }
+    
+    /* 更小屏幕上进一步缩小团队展示部分 */
+    .team-circle-container {
+        width: 350px;
+        height: 350px;
+        transform: scale(0.8);
+    }
+    
+    .team-ring {
+        width: 260px;
+        height: 260px;
+    }
+    
+    .team-member {
+        width: 100px;
+        height: 100px;
     }
     
     .memory-card-preview-wrapper {
@@ -1068,9 +1078,25 @@ a:hover {
         font-size: 1.8rem;
     }
     
+    /* 在超小屏幕上进一步缩小团队展示部分 */
+    .team-circle-container {
+        width: 300px;
+        height: 300px;
+        transform: scale(0.7);
+    }
+    
     .team-member {
-        width: 150px;
-        height: 150px;
+        width: 90px;
+        height: 90px;
+    }
+    
+    .team-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .team-logo i {
+        font-size: 2rem;
     }
     
     .game-image {
@@ -1099,15 +1125,21 @@ a:hover {
         padding: 80px 0 var(--spacing-md);
     }
     
-    .team-member {
-        width: 120px;
-        height: 120px;
+    /* 横屏模式下也保持圆形布局，但整体缩小 */
+    .team-circle-container {
+        width: 350px;
+        height: 350px;
+        transform: scale(0.75);
     }
     
-    .team-circle-container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+    .team-ring {
+        width: 260px;
+        height: 260px;
+    }
+    
+    .team-member {
+        width: 100px;
+        height: 100px;
     }
 }
 
