@@ -1379,16 +1379,29 @@ a:hover {
     }
 }
 
+/* 添加外部容器样式 */
+.typewriter-outer-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    height: auto;
+    position: relative;
+}
+
 /* 团队描述打字机效果样式 */
 .team-typewriter {
     max-width: 800px;
     margin: 0 auto;
     text-align: center;
-    min-height: 4.8rem; /* 固定高度，适合三行文本 */
+    height: 7.2rem; /* 改为固定高度，确保足够容纳四行文本 */
     background-color: rgba(0, 0, 0, 0.4); /* 半透明黑色背景 */
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* 防止内容溢出 */
 }
 
 #team-typewriter-text {
@@ -1399,6 +1412,7 @@ a:hover {
     display: inline-block;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* 文字阴影提高可读性 */
     font-weight: 500;
+    width: 100%; /* 确保文本占用整个宽度 */
 }
 
 /* 添加彩色文字效果，每行使用不同的颜色 */
@@ -1441,7 +1455,7 @@ a:hover {
 /* 确保文本在所有设备上正确显示 */
 @media (max-width: 576px) {
     .team-typewriter {
-        min-height: 6.4rem; /* 在小屏幕上增加高度 */
+        height: 9rem; /* 在小屏幕上增加固定高度 */
     }
 }
 

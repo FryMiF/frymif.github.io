@@ -71,6 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // 纯文本版本（用于逐字打印）
         const plainText = lines.join('\n');
         
+        // 预先创建所有span标签，但内容为空，保持结构稳定
+        let initialHtml = '';
+        for (let i = 0; i < lines.length; i++) {
+            initialHtml += `<span>${i > 0 ? '\n' : ''}</span>`;
+        }
+        teamTypewriterElement.innerHTML = initialHtml;
+        
         let currentIndex = 0;
         const typingSpeed = 30; // 更快的打字速度
         const pauseTime = 3000; // 完成后暂停时间更长
@@ -81,9 +88,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // 打字完成后暂停，然后重新开始
             if (currentIndex === plainText.length) {
                 setTimeout(() => {
-                    currentIndex = 0;
-                    teamTypewriterElement.innerHTML = '';
-                    typeTeamEffect();
+                    // 不清空HTML，而是使用淡出淡入效果
+                    teamTypewriterElement.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        currentIndex = 0;
+                        // 重置为初始结构
+                        teamTypewriterElement.innerHTML = initialHtml;
+                        teamTypewriterElement.style.opacity = '1';
+                        typeTeamEffect();
+                    }, 500); // 淡出后再重置
                 }, pauseTime);
                 return;
             }
@@ -93,31 +107,29 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // 将当前部分文本转换为对应的HTML
             let currentPlainText = plainText.substring(0, currentIndex);
-            let htmlResult = '';
+            let currentLines = currentPlainText.split('\n');
             
-            // 按行分割，并为每行添加span标签
-            const currentLines = currentPlainText.split('\n');
-            for (let i = 0; i < currentLines.length; i++) {
-                if (i === 0 && currentLines[i]) {
-                    htmlResult += '<span>' + currentLines[i] + '</span>';
-                } else if (i === 1 && currentLines[i]) {
-                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
-                } else if (i === 2 && currentLines[i]) {
-                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
-                } else if (i === 3 && currentLines[i]) {
-                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
+            // 更新HTML，保持结构稳定
+            const spans = teamTypewriterElement.getElementsByTagName('span');
+            for (let i = 0; i < lines.length; i++) {
+                if (i < currentLines.length) {
+                    spans[i].textContent = currentLines[i];
+                } else {
+                    spans[i].textContent = '';
                 }
             }
-            
-            teamTypewriterElement.innerHTML = htmlResult;
             
             // 设置下一次执行
             setTimeout(typeTeamEffect, typingSpeed);
         }
         
+        // 添加初始CSS过渡
+        teamTypewriterElement.style.transition = 'opacity 0.5s ease';
+        
         // 无论设备类型，都启用打字效果
-        teamTypewriterElement.innerHTML = '';
-        setTimeout(typeTeamEffect, 1000); // 延迟1秒开始，让页面先加载
+        setTimeout(() => {
+            typeTeamEffect();
+        }, 1000); // 延迟1秒开始，让页面先加载
     }
     
     // 添加平滑滚动到锚点链接
