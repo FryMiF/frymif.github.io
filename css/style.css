@@ -59,6 +59,12 @@ body {
     background-color: var(--background-light);
     min-height: 100vh; /* 确保至少有视口高度 */
     padding-bottom: env(safe-area-inset-bottom); /* iOS安全区域适配 */
+    background-image: linear-gradient(to bottom, 
+        var(--background-light) 0%,
+        var(--background-light) 60%,
+        rgba(26, 35, 126, 0.1) 70%,
+        rgba(0, 188, 212, 0.2) 100%);
+    background-attachment: fixed;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -644,14 +650,30 @@ a:hover {
 /* 团队展示区样式 */
 .team-showcase {
     padding: var(--spacing-xl) 0;
-    background-image: url('../images/team-background.png');
-    background-size: cover;
-    background-position: center;
+    position: relative;
+    min-height: 80vh; /* 减小高度，让页脚在页面底部显示 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1; /* 确保内容在背景之上 */
+}
+
+/* 团队展示区域遮罩，保持视觉一致性 */
+.team-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色遮罩 */
+    z-index: -1;
 }
 
 /* 确保内容在最上层 */
 .team-showcase .container {
     position: relative;
+    z-index: 2;
 }
 
 .team-circle-container {
@@ -856,10 +878,13 @@ a:hover {
 
 /* 页脚样式 */
 .footer {
-    background-color: var(--background-dark);
+    background-color: rgba(0, 0, 0, 0.7); /* 更深的半透明背景 */
     color: var(--text-light);
     padding: var(--spacing-md) 0;
     text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* 添加微妙的分隔线 */
+    position: relative;
+    z-index: 2; /* 确保在遮罩层上方 */
 }
 
 .footer a {
@@ -1418,18 +1443,22 @@ a:hover {
 /* 添加彩色文字效果，每行使用不同的颜色 */
 #team-typewriter-text span:nth-child(1) {
     color: #d8b5ff; /* 浅紫色，替换原来的深蓝色 */
+    text-shadow: 0 0 8px rgba(216, 181, 255, 0.5); /* 添加轻微发光效果 */
 }
 
 #team-typewriter-text span:nth-child(2) {
     color: #16a3b7; /* 青色 */
+    text-shadow: 0 0 8px rgba(22, 163, 183, 0.5);
 }
 
 #team-typewriter-text span:nth-child(3) {
     color: #ffb74d; /* 橙色 */
+    text-shadow: 0 0 8px rgba(255, 183, 77, 0.5);
 }
 
 #team-typewriter-text span:nth-child(4) {
     color: #3366cc; /* 蓝色 */
+    text-shadow: 0 0 8px rgba(51, 102, 204, 0.5);
 }
 
 #team-typewriter-text::after {
@@ -1511,4 +1540,64 @@ a:hover {
 .game-description p {
     font-size: 1.1rem;
     margin-bottom: 20px;
+}
+
+.team-showcase .section-title {
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.team-showcase .section-title::after {
+    background-color: var(--accent-color);
+}
+
+/* 确保打字机文字在暗背景上清晰可见 */
+#team-typewriter-text span:nth-child(1) {
+    color: #d8b5ff; /* 浅紫色，替换原来的深蓝色 */
+    text-shadow: 0 0 8px rgba(216, 181, 255, 0.5); /* 添加轻微发光效果 */
+}
+
+#team-typewriter-text span:nth-child(2) {
+    color: #16a3b7; /* 青色 */
+    text-shadow: 0 0 8px rgba(22, 163, 183, 0.5);
+}
+
+#team-typewriter-text span:nth-child(3) {
+    color: #ffb74d; /* 橙色 */
+    text-shadow: 0 0 8px rgba(255, 183, 77, 0.5);
+}
+
+#team-typewriter-text span:nth-child(4) {
+    color: #3366cc; /* 蓝色 */
+    text-shadow: 0 0 8px rgba(51, 102, 204, 0.5);
+}
+
+/* 添加全屏背景容器 */
+.page-background {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(rgba(255,255,255,1) 0%, 
+                               rgba(255,255,255,0.8) 30%, 
+                               rgba(255,255,255,0) 100%);
+}
+
+/* 底部背景图片 */
+.page-background::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/team-background.png');
+    background-position: bottom center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+    opacity: 1;
 }
