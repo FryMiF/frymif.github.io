@@ -60,23 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 打字机效果 - 团队描述
     const teamTypewriterElement = document.getElementById('team-typewriter-text');
     if (teamTypewriterElement) {
-        // 原始文本
-        const originalText = "我们是一支充满激情的团队，致力于创造好玩、有趣的游戏体验。每位成员都贡献自己的专业技能，通过紧密合作，打造了这个迷你游戏合集网站。";
-        
-        // 将文本分成三行
+        // 将文本分成四行
         const lines = [
             "我们是一支充满激情的团队，",
             "致力于创造好玩、有趣的游戏体验。",
             "每位成员都贡献自己的专业技能，",
             "打造了这个迷你游戏合集网站。"
         ];
-        
-        // 彩色文本版本
-        const coloredTextHTML = 
-            '<span class="color-primary">' + lines[0] + '</span>\n' +
-            '<span class="color-secondary">' + lines[1] + '</span>\n' +
-            '<span class="color-accent">' + lines[2] + '</span>\n' +
-            '<span class="color-primary">' + lines[3] + '</span>';
         
         // 纯文本版本（用于逐字打印）
         const plainText = lines.join('\n');
@@ -101,21 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // 更新显示文本
             currentIndex++;
             
-            // 将当前部分文本转换为对应的彩色HTML
+            // 将当前部分文本转换为对应的HTML
             let currentPlainText = plainText.substring(0, currentIndex);
             let htmlResult = '';
             
-            // 按行分割，并为每行添加相应的颜色类
+            // 按行分割，并为每行添加span标签
             const currentLines = currentPlainText.split('\n');
             for (let i = 0; i < currentLines.length; i++) {
                 if (i === 0 && currentLines[i]) {
-                    htmlResult += '<span class="color-primary">' + currentLines[i] + '</span>';
+                    htmlResult += '<span>' + currentLines[i] + '</span>';
                 } else if (i === 1 && currentLines[i]) {
-                    htmlResult += '\n<span class="color-secondary">' + currentLines[i] + '</span>';
+                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
                 } else if (i === 2 && currentLines[i]) {
-                    htmlResult += '\n<span class="color-accent">' + currentLines[i] + '</span>';
+                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
                 } else if (i === 3 && currentLines[i]) {
-                    htmlResult += '\n<span class="color-primary">' + currentLines[i] + '</span>';
+                    htmlResult += '\n<span>' + currentLines[i] + '</span>';
                 }
             }
             

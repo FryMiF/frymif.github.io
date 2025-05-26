@@ -122,6 +122,11 @@ a:hover {
     position: relative;
 }
 
+.games-showcase .section-title {
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 .section-title::after {
     content: '';
     display: block;
@@ -129,6 +134,10 @@ a:hover {
     height: 3px;
     background-color: var(--secondary-color);
     margin: var(--spacing-xs) auto;
+}
+
+.games-showcase .section-title::after {
+    background-color: var(--accent-color);
 }
 
 /* 导航栏样式 */
@@ -159,10 +168,13 @@ a:hover {
 .nav-links {
     display: flex;
     list-style: none;
+    align-items: center; /* 确保所有导航项垂直居中对齐 */
 }
 
 .nav-links li {
     margin-left: var(--spacing-md);
+    display: flex; /* 使所有导航项都使用flex布局 */
+    align-items: center; /* 垂直居中 */
 }
 
 .nav-links a {
@@ -190,12 +202,18 @@ a:hover {
 /* GitHub链接样式 */
 .github-link {
     margin-left: var(--spacing-md);
+    display: flex;
+    align-items: center;
 }
 
 .github-link a {
-    font-size: 1.5rem;
+    font-size: 1.3rem; /* 缩小图标尺寸 */
     color: var(--text-light);
     transition: transform var(--transition-normal) ease, color var(--transition-normal) ease;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0.5rem 0; /* 与其他导航项保持一致的padding */
 }
 
 .github-link a:hover {
@@ -244,9 +262,7 @@ a:hover {
 /* 欢迎区样式 */
 .hero {
     height: 100vh;
-    background: linear-gradient(135deg, var(--primary-color), #304ffe, var(--secondary-color));
-    background-size: cover;
-    background-position: center;
+    background: linear-gradient(rgba(26,35,126,0.5), rgba(0,188,212,0.3)), url('../images/hero-bg.png') center center/cover no-repeat;
     color: var(--text-light);
     display: flex;
     align-items: center;
@@ -264,7 +280,29 @@ a:hover {
 .hero h1 {
     font-size: 3rem;
     margin-bottom: var(--spacing-md);
-    color: var(--text-light);
+    /* 使用渐变色文字替代纯白色 */
+    background: linear-gradient(to right, #ff9ce3, #ffffff, #a6d9ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    /* 添加文字阴影增强效果 */
+    text-shadow: 0 0 10px rgba(255, 156, 227, 0.7), 
+                 0 0 20px rgba(166, 217, 255, 0.5);
+    /* 添加轻微动画效果 */
+    animation: titleGlow 3s infinite alternate;
+}
+
+/* 添加标题光晕动画 */
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 156, 227, 0.7),
+                     0 0 20px rgba(166, 217, 255, 0.5);
+    }
+    to {
+        text-shadow: 0 0 15px rgba(255, 156, 227, 0.9),
+                     0 0 30px rgba(166, 217, 255, 0.7),
+                     0 0 45px rgba(166, 217, 255, 0.4);
+    }
 }
 
 .hero p {
@@ -280,8 +318,29 @@ a:hover {
 
 /* 游戏预览卡片区样式 */
 .games-showcase {
-    background-color: var(--background-light);
+    background-image: url('../images/game.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
     padding: var(--spacing-xl) 0;
+}
+
+/* 添加半透明遮罩 */
+.games-showcase::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4); /* 黑色半透明遮罩 */
+    z-index: 1;
+}
+
+/* 确保内容在遮罩之上 */
+.games-showcase .container {
+    position: relative;
+    z-index: 2;
 }
 
 .games-grid {
@@ -292,10 +351,10 @@ a:hover {
 }
 
 .game-card {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: transform var(--transition-normal) ease, box-shadow var(--transition-normal) ease;
     display: flex; /* 使用flex布局使内容和按钮区域分开 */
     flex-direction: column; /* 垂直排列 */
@@ -312,12 +371,7 @@ a:hover {
     height: 220px; /* 预览区域高度 */
     position: relative;
     overflow: hidden; /* 确保预览动画不溢出 */
-    /* 移除原有的背景色和文字，由预览动画填充 */
 }
-
-/* 移除原有的 game-image img 样式，因为我们不再使用图片 */
-/* .game-image img { ... } */
-/* .game-card:hover .game-image img { ... } */
 
 .game-content {
     padding: var(--spacing-sm);
@@ -590,7 +644,13 @@ a:hover {
 /* 团队展示区样式 */
 .team-showcase {
     padding: var(--spacing-xl) 0;
-    background-color: white;
+    background-image: url('../images/team-background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* 确保内容在最上层 */
+.team-showcase .container {
     position: relative;
 }
 
@@ -968,11 +1028,17 @@ a:hover {
 
     .github-link {
         margin: 0;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: var(--spacing-sm);
     }
     
     .github-link a {
         padding: 10px;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     /* 调整技能标签样式，确保在移动端也能正常显示 */
@@ -1319,20 +1385,43 @@ a:hover {
     margin: 0 auto;
     text-align: center;
     min-height: 4.8rem; /* 固定高度，适合三行文本 */
+    background-color: rgba(0, 0, 0, 0.4); /* 半透明黑色背景 */
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 #team-typewriter-text {
     position: relative;
     white-space: pre-wrap;
     word-break: break-word;
-    line-height: 1.6;
+    line-height: 1.8;
     display: inline-block;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* 文字阴影提高可读性 */
+    font-weight: 500;
+}
+
+/* 添加彩色文字效果，每行使用不同的颜色 */
+#team-typewriter-text span:nth-child(1) {
+    color: #d8b5ff; /* 浅紫色，替换原来的深蓝色 */
+}
+
+#team-typewriter-text span:nth-child(2) {
+    color: #16a3b7; /* 青色 */
+}
+
+#team-typewriter-text span:nth-child(3) {
+    color: #ffb74d; /* 橙色 */
+}
+
+#team-typewriter-text span:nth-child(4) {
+    color: #3366cc; /* 蓝色 */
 }
 
 #team-typewriter-text::after {
     content: '|';
     position: absolute;
-    color: var(--accent-color);
+    color: #ffb74d; /* 改变光标颜色与文字协调 */
     animation: cursor-blink 0.8s infinite;
 }
 
