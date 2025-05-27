@@ -15,10 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
             navLinks.classList.toggle('active');
             menuToggle.classList.toggle('active');
             
-            // 切换汉堡菜单的动画
-            const spans = menuToggle.querySelectorAll('span');
-            spans.forEach(span => span.classList.toggle('active'));
-            
             // 防止菜单展开时背景滚动
             document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
         });
@@ -159,12 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 navLinks.classList.remove('active');
                 menuToggle.classList.remove('active');
                 document.body.style.overflow = '';
-                
-                // 重置汉堡菜单图标
-                const spans = menuToggle.querySelectorAll('span');
-                if (spans) {
-                    spans.forEach(span => span.classList.remove('active'));
-                }
             }
         });
     });
